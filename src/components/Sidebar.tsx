@@ -11,13 +11,21 @@ interface SidebarProps {
 export default function Sidebar({ isOpen }: SidebarProps) {
   const pathname = usePathname();
 
+  // Filter out disabled tools and sections with no enabled tools
+  const enabledSections = toolSections
+    .map(section => ({
+      ...section,
+      tools: section.tools.filter(tool => tool.enabled)
+    }))
+    .filter(section => section.tools.length > 0);
+
   return (
     <aside className={`fixed left-0 top-16 bottom-0 w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-200 ease-in-out z-40 ${
       isOpen ? 'translate-x-0' : '-translate-x-full'
     } md:translate-x-0`}>
       <nav className="p-4 h-full overflow-y-auto">
         <ul className="space-y-2">
-          {toolSections.map((section, index) => (
+          {enabledSections.map((section, index) => (
             <li key={index} className="mb-4">
               <div className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 font-medium">
                 <span className="mr-2">{section.icon}</span>

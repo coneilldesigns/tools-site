@@ -1,6 +1,7 @@
 export interface Tool {
   name: string;
   path: string;
+  enabled: boolean;
   seo: {
     title: string;
     description: string;
@@ -22,6 +23,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Feet ⇄ Inches", 
         path: "feet-to-inches",
+        enabled: true,
         seo: {
           title: "Feet to Inches Converter | Free Online Length Conversion Tool",
           description: "Convert feet to inches and inches to feet with our free online calculator. Quick, accurate, and easy to use length conversion tool.",
@@ -31,6 +33,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "CM ⇄ Inches", 
         path: "cm-to-inches",
+        enabled: true,
         seo: {
           title: "CM to Inches Converter | Free Online Length Conversion Tool",
           description: "Convert centimeters to inches and inches to centimeters with our free online calculator. Quick, accurate, and easy to use length conversion tool.",
@@ -40,6 +43,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Miles ⇄ KM", 
         path: "miles-to-km",
+        enabled: true,
         seo: {
           title: "Miles to Kilometers Converter | Free Online Distance Conversion Tool",
           description: "Convert miles to kilometers and kilometers to miles with our free online calculator. Quick, accurate, and easy to use distance conversion tool.",
@@ -49,6 +53,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Fahrenheit ⇄ Celsius", 
         path: "fahrenheit-to-celsius",
+        enabled: true,
         seo: {
           title: "Fahrenheit to Celsius Converter | Free Online Temperature Conversion Tool",
           description: "Convert Fahrenheit to Celsius and Celsius to Fahrenheit with our free online calculator. Quick, accurate, and easy to use temperature conversion tool.",
@@ -58,6 +63,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Grams ⇄ Ounces", 
         path: "grams-to-ounces",
+        enabled: false,
         seo: {
           title: "Grams to Ounces Converter | Free Online Weight Conversion Tool",
           description: "Convert grams to ounces and ounces to grams with our free online calculator. Quick, accurate, and easy to use weight conversion tool.",
@@ -67,6 +73,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Litres ⇄ Gallons", 
         path: "litres-to-gallons",
+        enabled: false,
         seo: {
           title: "Liters to Gallons Converter | Free Online Volume Conversion Tool",
           description: "Convert liters to gallons and gallons to liters with our free online calculator. Quick, accurate, and easy to use volume conversion tool.",
@@ -82,6 +89,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Time zone converter", 
         path: "time-zone-converter",
+        enabled: true,
         seo: {
           title: "Time Zone Converter | Free Online Time Zone Conversion Tool",
           description: "Convert times between different time zones with our free online time zone converter. Quick, accurate, and easy to use time conversion tool.",
@@ -91,6 +99,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Countdown timer", 
         path: "countdown-timer",
+        enabled: true,
         seo: {
           title: "Countdown Timer | Free Online Countdown Clock Tool",
           description: "Create and manage countdown timers with our free online countdown timer. Perfect for events, deadlines, and time tracking.",
@@ -100,6 +109,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Age calculator", 
         path: "age-calculator",
+        enabled: true,
         seo: {
           title: "Age Calculator | Free Online Age Calculation Tool",
           description: "Calculate exact age in years, months, and days with our free online age calculator. Quick and accurate age calculation tool.",
@@ -109,6 +119,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Days between dates", 
         path: "days-between-dates",
+        enabled: true,
         seo: {
           title: "Days Between Dates Calculator | Free Online Date Difference Tool",
           description: "Calculate the number of days between two dates with our free online calculator. Quick and accurate date difference calculation.",
@@ -118,6 +129,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "What day was it?", 
         path: "what-day-was-it",
+        enabled: true,
         seo: {
           title: "What Day Was It? | Free Online Day of Week Calculator",
           description: "Find out what day of the week a specific date was with our free online calculator. Quick and easy day of week lookup tool.",
@@ -127,6 +139,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Unix timestamp converter", 
         path: "unix-timestamp-converter",
+        enabled: true,
         seo: {
           title: "Unix Timestamp Converter | Free Online Timestamp Conversion Tool",
           description: "Convert Unix timestamps to human-readable dates and vice versa with our free online converter. Quick and accurate timestamp conversion.",
@@ -142,6 +155,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Word/character counter", 
         path: "word-counter",
+        enabled: true,
         seo: {
           title: "Word Counter | Free Online Word and Character Count Tool",
           description: "Count words, characters, sentences, and paragraphs with our free online word counter. Perfect for essays, articles, and social media posts.",
@@ -151,6 +165,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Text case converter", 
         path: "text-case-converter",
+        enabled: true,
         seo: {
           title: "Text Case Converter | Free Online Text Case Transformation Tool",
           description: "Convert text between different cases (uppercase, lowercase, title case) with our free online text case converter. Quick and easy text transformation.",
@@ -160,6 +175,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Remove line breaks / extra spaces", 
         path: "text-cleaner",
+        enabled: true,
         seo: {
           title: "Text Cleaner | Free Online Text Formatting Tool",
           description: "Clean and format text by removing extra spaces, line breaks, and unwanted characters with our free online text cleaner. Quick and easy text formatting.",
@@ -169,6 +185,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Lorem Ipsum generator", 
         path: "lorem-ipsum-generator",
+        enabled: true,
         seo: {
           title: "Lorem Ipsum Generator | Free Online Dummy Text Generator",
           description: "Generate Lorem Ipsum placeholder text with our free online generator. Perfect for design mockups and content placeholders.",
@@ -178,6 +195,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Text to emoji translator", 
         path: "text-to-emoji",
+        enabled: true,
         seo: {
           title: "Text to Emoji Translator | Free Online Emoji Conversion Tool",
           description: "Convert text to emojis with our free online translator. Add fun and expression to your messages with emoji conversion.",
@@ -187,6 +205,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Fancy text generator", 
         path: "fancy-text-generator",
+        enabled: true,
         seo: {
           title: "Fancy Text Generator | Free Online Stylish Text Creator",
           description: "Create stylish and decorative text with our free online fancy text generator. Perfect for social media, usernames, and creative writing.",
@@ -202,6 +221,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Tip calculator", 
         path: "tip-calculator",
+        enabled: false,
         seo: {
           title: "Tip Calculator | Free Online Gratuity Calculator",
           description: "Calculate tips and split bills with our free online tip calculator. Quick and easy gratuity calculation for restaurants and services.",
@@ -211,6 +231,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Percentage calculator", 
         path: "percentage-calculator",
+        enabled: false,
         seo: {
           title: "Percentage Calculator | Free Online Percentage Calculation Tool",
           description: "Calculate percentages, increases, decreases, and differences with our free online percentage calculator. Quick and accurate percentage calculations.",
@@ -220,6 +241,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Loan / mortgage calculator", 
         path: "loan-calculator",
+        enabled: false,
         seo: {
           title: "Loan Calculator | Free Online Mortgage and Loan Calculator",
           description: "Calculate loan payments, interest rates, and amortization schedules with our free online loan calculator. Perfect for mortgages and personal loans.",
@@ -229,6 +251,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Random number generator", 
         path: "random-number-generator",
+        enabled: false,
         seo: {
           title: "Random Number Generator | Free Online Random Number Tool",
           description: "Generate random numbers within a specified range with our free online random number generator. Perfect for games, simulations, and random selection.",
@@ -238,6 +261,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "GPA calculator", 
         path: "gpa-calculator",
+        enabled: false,
         seo: {
           title: "GPA Calculator | Free Online Grade Point Average Calculator",
           description: "Calculate your GPA with our free online GPA calculator. Quick and accurate grade point average calculation for students.",
@@ -247,6 +271,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "BMI calculator", 
         path: "bmi-calculator",
+        enabled: false,
         seo: {
           title: "BMI Calculator | Free Online Body Mass Index Calculator",
           description: "Calculate your Body Mass Index (BMI) with our free online BMI calculator. Quick and accurate health assessment tool.",
@@ -256,6 +281,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Prime number checker", 
         path: "prime-number-checker",
+        enabled: false,
         seo: {
           title: "Prime Number Checker | Free Online Prime Number Tool",
           description: "Check if a number is prime with our free online prime number checker. Quick and accurate prime number verification.",
@@ -271,6 +297,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Invoice generator", 
         path: "invoice-generator",
+        enabled: false,
         seo: {
           title: "Invoice Generator | Free Online Invoice Creation Tool",
           description: "Create professional invoices with our free online invoice generator. Quick and easy invoice creation for businesses and freelancers.",
@@ -280,6 +307,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Meeting scheduler", 
         path: "meeting-scheduler",
+        enabled: false,
         seo: {
           title: "Meeting Scheduler | Free Online Meeting Planning Tool",
           description: "Schedule and organize meetings with our free online meeting scheduler. Perfect for team coordination and event planning.",
@@ -289,6 +317,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "QR code generator", 
         path: "qr-code-generator",
+        enabled: false,
         seo: {
           title: "QR Code Generator | Free Online QR Code Creation Tool",
           description: "Create custom QR codes with our free online QR code generator. Perfect for marketing, business cards, and digital content.",
@@ -298,6 +327,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Barcode generator", 
         path: "barcode-generator",
+        enabled: false,
         seo: {
           title: "Barcode Generator | Free Online Barcode Creation Tool",
           description: "Create various types of barcodes with our free online barcode generator. Perfect for inventory, retail, and product management.",
@@ -307,6 +337,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Email signature generator", 
         path: "email-signature-generator",
+        enabled: false,
         seo: {
           title: "Email Signature Generator | Free Online Signature Creation Tool",
           description: "Create professional email signatures with our free online signature generator. Perfect for business and personal email accounts.",
@@ -316,6 +347,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Resume builder", 
         path: "resume-builder",
+        enabled: false,
         seo: {
           title: "Resume Builder | Free Online Resume Creation Tool",
           description: "Create professional resumes with our free online resume builder. Perfect for job seekers and career advancement.",
@@ -331,6 +363,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Color picker / converter", 
         path: "color-picker",
+        enabled: false,
         seo: {
           title: "Color Picker | Free Online Color Selection and Conversion Tool",
           description: "Pick colors and convert between color formats with our free online color picker. Perfect for web design and digital art.",
@@ -340,6 +373,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Image resizer / compressor", 
         path: "image-resizer",
+        enabled: false,
         seo: {
           title: "Image Resizer | Free Online Image Resizing and Compression Tool",
           description: "Resize and compress images with our free online image resizer. Perfect for web optimization and social media.",
@@ -349,6 +383,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Font pairing tool", 
         path: "font-pairing",
+        enabled: false,
         seo: {
           title: "Font Pairing Tool | Free Online Typography Combination Tool",
           description: "Find perfect font combinations with our free online font pairing tool. Perfect for web design and typography.",
@@ -358,6 +393,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Favicon generator", 
         path: "favicon-generator",
+        enabled: false,
         seo: {
           title: "Favicon Generator | Free Online Website Icon Creation Tool",
           description: "Create website favicons with our free online favicon generator. Perfect for web development and site branding.",
@@ -367,6 +403,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "CSS box shadow generator", 
         path: "box-shadow-generator",
+        enabled: false,
         seo: {
           title: "CSS Box Shadow Generator | Free Online Shadow Effect Tool",
           description: "Create CSS box shadows with our free online generator. Perfect for web design and UI development.",
@@ -376,6 +413,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "HTML table generator", 
         path: "table-generator",
+        enabled: false,
         seo: {
           title: "HTML Table Generator | Free Online Table Creation Tool",
           description: "Create HTML tables with our free online table generator. Perfect for web development and data presentation.",
@@ -391,6 +429,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Reading time estimator", 
         path: "reading-time-estimator",
+        enabled: false,
         seo: {
           title: "Reading Time Estimator | Free Online Reading Duration Calculator",
           description: "Estimate reading time for any text with our free online reading time estimator. Perfect for content creators and readers.",
@@ -400,6 +439,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Number to words", 
         path: "number-to-words",
+        enabled: false,
         seo: {
           title: "Number to Words Converter | Free Online Number Spelling Tool",
           description: "Convert numbers to words with our free online number to words converter. Perfect for writing and documentation.",
@@ -409,6 +449,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Spelling checker", 
         path: "spelling-checker",
+        enabled: false,
         seo: {
           title: "Spelling Checker | Free Online Spell Check Tool",
           description: "Check spelling and grammar with our free online spelling checker. Perfect for writing and editing.",
@@ -418,6 +459,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Roman numerals converter", 
         path: "roman-numerals",
+        enabled: false,
         seo: {
           title: "Roman Numerals Converter | Free Online Roman Number Tool",
           description: "Convert between Roman numerals and regular numbers with our free online converter. Perfect for education and historical references.",
@@ -427,6 +469,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Morse code translator", 
         path: "morse-code",
+        enabled: false,
         seo: {
           title: "Morse Code Translator | Free Online Morse Code Tool",
           description: "Translate text to Morse code and vice versa with our free online translator. Perfect for learning and communication.",
@@ -442,6 +485,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Password generator", 
         path: "password-generator",
+        enabled: false,
         seo: {
           title: "Password Generator | Free Online Secure Password Creator",
           description: "Generate secure passwords with our free online password generator. Perfect for account security and protection.",
@@ -451,6 +495,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Password strength checker", 
         path: "password-strength",
+        enabled: false,
         seo: {
           title: "Password Strength Checker | Free Online Password Security Tool",
           description: "Check password strength with our free online password strength checker. Perfect for security assessment.",
@@ -460,6 +505,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Base64 encode/decode", 
         path: "base64",
+        enabled: false,
         seo: {
           title: "Base64 Encoder/Decoder | Free Online Data Encoding Tool",
           description: "Encode and decode Base64 data with our free online tool. Perfect for data transmission and storage.",
@@ -469,6 +515,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "URL encoder/decoder", 
         path: "url-encoder",
+        enabled: false,
         seo: {
           title: "URL Encoder/Decoder | Free Online URL Encoding Tool",
           description: "Encode and decode URLs with our free online tool. Perfect for web development and data handling.",
@@ -478,6 +525,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Text encrypt/decrypt", 
         path: "text-encrypt",
+        enabled: false,
         seo: {
           title: "Text Encrypt/Decrypt | Free Online Text Encryption Tool",
           description: "Encrypt and decrypt text with our free online tool. Perfect for secure communication and data protection.",
@@ -493,6 +541,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Coin flipper", 
         path: "coin-flipper",
+        enabled: false,
         seo: {
           title: "Coin Flipper | Free Online Virtual Coin Flip Tool",
           description: "Flip a virtual coin with our free online coin flipper. Perfect for decision making and games.",
@@ -502,6 +551,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Dice roller", 
         path: "dice-roller",
+        enabled: false,
         seo: {
           title: "Dice Roller | Free Online Virtual Dice Rolling Tool",
           description: "Roll virtual dice with our free online dice roller. Perfect for games and random number generation.",
@@ -511,6 +561,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Would-you-rather question generator", 
         path: "would-you-rather",
+        enabled: false,
         seo: {
           title: "Would You Rather Generator | Free Online Question Generator",
           description: "Generate would-you-rather questions with our free online tool. Perfect for games and icebreakers.",
@@ -520,6 +571,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Truth or Dare tool", 
         path: "truth-or-dare",
+        enabled: false,
         seo: {
           title: "Truth or Dare Generator | Free Online Game Tool",
           description: "Generate truth or dare questions with our free online tool. Perfect for parties and social games.",
@@ -529,6 +581,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Random name picker", 
         path: "random-name-picker",
+        enabled: false,
         seo: {
           title: "Random Name Picker | Free Online Name Selection Tool",
           description: "Pick random names with our free online name picker. Perfect for games and random selection.",

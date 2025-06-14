@@ -1,70 +1,140 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { NumericFormat } from 'react-number-format';
 
 export default function LitresToGallons() {
   const [litres, setLitres] = useState<string>('');
   const [gallons, setGallons] = useState<string>('');
+  const [textSize, setTextSize] = useState<string>('8vw');
 
-  const handleLitresChange = (value: string) => {
-    setLitres(value);
+  useEffect(() => {
+    const maxLength = Math.max(litres.length, gallons.length);
+    if (maxLength > 8) {
+      setTextSize('4vw');
+    } else if (maxLength > 6) {
+      setTextSize('5vw');
+    } else if (maxLength > 4) {
+      setTextSize('6vw');
+    } else {
+      setTextSize('8vw');
+    }
+  }, [litres, gallons]);
+
+  const formatNumber = (num: number): string => {
+    const roundedToInt = Math.round(num);
+    if (Math.abs(num - roundedToInt) < 0.0001) {
+      return roundedToInt.toString();
+    }
+    return Number(num.toFixed(2)).toString();
+  };
+
+  const handleLitresChange = (value: number | '') => {
     if (value === '') {
+      setLitres('');
       setGallons('');
       return;
     }
-    const litresNum = parseFloat(value);
-    if (!isNaN(litresNum)) {
-      setGallons((litresNum / 3.78541).toFixed(2));
-    }
+    setLitres(value.toString());
+    const gallonsNum = value / 3.78541;
+    setGallons(formatNumber(gallonsNum));
   };
 
-  const handleGallonsChange = (value: string) => {
-    setGallons(value);
+  const handleGallonsChange = (value: number | '') => {
     if (value === '') {
+      setGallons('');
       setLitres('');
       return;
     }
-    const gallonsNum = parseFloat(value);
-    if (!isNaN(gallonsNum)) {
-      setLitres((gallonsNum * 3.78541).toFixed(2));
-    }
+    setGallons(value.toString());
+    const litresNum = value * 3.78541;
+    setLitres(formatNumber(litresNum));
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="litres" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Litres
-            </label>
-            <input
-              type="number"
-              id="litres"
+    <div className="flex items-center justify-center min-h-[50vh] w-full">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center justify-between w-full px-4 md:px-8"
+      >
+        <motion.div 
+          className="relative flex-1"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          <div className="relative">
+            <NumericFormat
               value={litres}
-              onChange={(e) => handleLitresChange(e.target.value)}
-              placeholder="Enter volume in litres"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-              step="0.01"
+              onValueChange={({ floatValue }) => {
+                handleLitresChange(floatValue ?? '');
+              }}
+              placeholder="0"
+              className="w-full aspect-square min-w-[120px] font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden mx-auto"
+              style={{ fontSize: textSize }}
+              decimalScale={2}
+              allowNegative={false}
+              allowLeadingZeros={false}
+              valueIsNumericString={false}
             />
+            <motion.div 
+              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              LITRES
+            </motion.div>
           </div>
+        </motion.div>
 
-          <div>
-            <label htmlFor="gallons" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Gallons
-            </label>
-            <input
-              type="number"
-              id="gallons"
+        <motion.div 
+          className="font-bold text-gray-600 px-8"
+          style={{ fontSize: textSize }}
+          animate={{ 
+            scale: [1, 1.1, 1],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          /
+        </motion.div>
+
+        <motion.div 
+          className="relative flex-1"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          <div className="relative">
+            <NumericFormat
               value={gallons}
-              onChange={(e) => handleGallonsChange(e.target.value)}
-              placeholder="Enter volume in gallons"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-              step="0.01"
+              onValueChange={({ floatValue }) => {
+                handleGallonsChange(floatValue ?? '');
+              }}
+              placeholder="0"
+              className="w-full aspect-square min-w-[120px] font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden mx-auto"
+              style={{ fontSize: textSize }}
+              decimalScale={2}
+              allowNegative={false}
+              allowLeadingZeros={false}
+              valueIsNumericString={false}
             />
+            <motion.div 
+              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              GALLONS
+            </motion.div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 } 

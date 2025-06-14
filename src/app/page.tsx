@@ -14,6 +14,14 @@ export default function Home() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Filter out disabled tools and sections with no enabled tools
+  const enabledSections = toolSections
+    .map(section => ({
+      ...section,
+      tools: section.tools.filter(tool => tool.enabled)
+    }))
+    .filter(section => section.tools.length > 0);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header onMenuClick={toggleSidebar} />
@@ -27,7 +35,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl font-bold mb-8">Tools & Utilities</h1>
             
-            {toolSections.map((section, index) => (
+            {enabledSections.map((section, index) => (
               <div key={index} className="mb-12">
                 <h2 className="text-2xl font-semibold mb-6 flex items-center">
                   <span className="mr-3">{section.icon}</span>

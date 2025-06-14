@@ -1,70 +1,140 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { NumericFormat } from 'react-number-format';
 
 export default function CmToInches() {
   const [cm, setCm] = useState<string>('');
   const [inches, setInches] = useState<string>('');
+  const [textSize, setTextSize] = useState<string>('8vw');
 
-  const handleCmChange = (value: string) => {
-    setCm(value);
+  useEffect(() => {
+    const maxLength = Math.max(cm.length, inches.length);
+    if (maxLength > 8) {
+      setTextSize('4vw');
+    } else if (maxLength > 6) {
+      setTextSize('5vw');
+    } else if (maxLength > 4) {
+      setTextSize('6vw');
+    } else {
+      setTextSize('8vw');
+    }
+  }, [cm, inches]);
+
+  const formatNumber = (num: number): string => {
+    const roundedToInt = Math.round(num);
+    if (Math.abs(num - roundedToInt) < 0.0001) {
+      return roundedToInt.toString();
+    }
+    return Number(num.toFixed(2)).toString();
+  };
+
+  const handleCmChange = (value: number | '') => {
     if (value === '') {
+      setCm('');
       setInches('');
       return;
     }
-    const cmNum = parseFloat(value);
-    if (!isNaN(cmNum)) {
-      setInches((cmNum / 2.54).toFixed(2));
-    }
+    setCm(value.toString());
+    const inchesNum = value / 2.54;
+    setInches(formatNumber(inchesNum));
   };
 
-  const handleInchesChange = (value: string) => {
-    setInches(value);
+  const handleInchesChange = (value: number | '') => {
     if (value === '') {
+      setInches('');
       setCm('');
       return;
     }
-    const inchesNum = parseFloat(value);
-    if (!isNaN(inchesNum)) {
-      setCm((inchesNum * 2.54).toFixed(2));
-    }
+    setInches(value.toString());
+    const cmNum = value * 2.54;
+    setCm(formatNumber(cmNum));
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="cm" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Centimeters
-            </label>
-            <input
-              type="number"
-              id="cm"
+    <div className="flex items-center justify-center min-h-[50vh] w-full">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center justify-between w-full px-4 md:px-8"
+      >
+        <motion.div 
+          className="relative flex-1"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          <div className="relative">
+            <NumericFormat
               value={cm}
-              onChange={(e) => handleCmChange(e.target.value)}
-              placeholder="Enter centimeters"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-              step="0.01"
+              onValueChange={({ floatValue }) => {
+                handleCmChange(floatValue ?? '');
+              }}
+              placeholder="0"
+              className="w-full aspect-square min-w-[120px] font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden mx-auto"
+              style={{ fontSize: textSize }}
+              decimalScale={2}
+              allowNegative={false}
+              allowLeadingZeros={false}
+              valueIsNumericString={false}
             />
+            <motion.div 
+              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              CM
+            </motion.div>
           </div>
+        </motion.div>
 
-          <div>
-            <label htmlFor="inches" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Inches
-            </label>
-            <input
-              type="number"
-              id="inches"
+        <motion.div 
+          className="font-bold text-gray-600 px-8"
+          style={{ fontSize: textSize }}
+          animate={{ 
+            scale: [1, 1.1, 1],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          /
+        </motion.div>
+
+        <motion.div 
+          className="relative flex-1"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          <div className="relative">
+            <NumericFormat
               value={inches}
-              onChange={(e) => handleInchesChange(e.target.value)}
-              placeholder="Enter inches"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-              step="0.01"
+              onValueChange={({ floatValue }) => {
+                handleInchesChange(floatValue ?? '');
+              }}
+              placeholder="0"
+              className="w-full aspect-square min-w-[120px] font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden mx-auto"
+              style={{ fontSize: textSize }}
+              decimalScale={2}
+              allowNegative={false}
+              allowLeadingZeros={false}
+              valueIsNumericString={false}
             />
+            <motion.div 
+              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              INCHES
+            </motion.div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 } 

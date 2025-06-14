@@ -33,59 +33,61 @@ export default function LoremIpsumGenerator() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Number of Paragraphs
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="10"
-            value={paragraphs}
-            onChange={(e) => setParagraphs(Math.min(10, Math.max(1, parseInt(e.target.value) || 1)))}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Words per Paragraph
-          </label>
-          <input
-            type="number"
-            min="10"
-            max="200"
-            value={words}
-            onChange={(e) => setWords(Math.min(200, Math.max(10, parseInt(e.target.value) || 10)))}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-      </div>
-
-      <div className="flex gap-4">
-        <button
-          onClick={generateLoremIpsum}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Generate
-        </button>
-        {generatedText && (
-          <button
-            onClick={copyToClipboard}
-            className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-          >
-            Copy to Clipboard
-          </button>
-        )}
-      </div>
-
-      {generatedText && (
-        <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-          <div className="whitespace-pre-wrap text-gray-900 dark:text-white">
-            {generatedText}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="paragraphs" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Number of Paragraphs
+              </label>
+              <input
+                type="number"
+                id="paragraphs"
+                value={paragraphs}
+                onChange={(e) => setParagraphs(parseInt(e.target.value) || 0)}
+                min="1"
+                max="10"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
+              />
+            </div>
+            <div>
+              <label htmlFor="wordsPerParagraph" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Words per Paragraph
+              </label>
+              <input
+                type="number"
+                id="wordsPerParagraph"
+                value={words}
+                onChange={(e) => setWords(parseInt(e.target.value) || 0)}
+                min="10"
+                max="200"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
+              />
+            </div>
           </div>
+
+          <div className="flex gap-4">
+            <button
+              onClick={generateLoremIpsum}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Generate
+            </button>
+            <button
+              onClick={copyToClipboard}
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            >
+              Copy
+            </button>
+          </div>
+
+          {generatedText && (
+            <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+              <p className="whitespace-pre-wrap text-gray-900 dark:text-white">{generatedText}</p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 } 
