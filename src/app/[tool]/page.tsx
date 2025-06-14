@@ -23,15 +23,16 @@ import {
   FancyTextGenerator
 } from '@/components/tools';
 
-export default function ToolPage({ params }: { params: { tool: string } }) {
-  const toolPath = params.tool;
+export default async function ToolPage({ params }: { params: Promise<{ tool: string }> }) {
+  const { tool } = await params;
+  const toolPath = tool;
 
   // Find the tool in our sections
-  const tool = toolSections
+  const toolData = toolSections
     .flatMap(section => section.tools)
-    .find(tool => tool.path === toolPath);
+    .find(t => t.path === toolPath);
 
-  if (!tool) {
+  if (!toolData) {
     return (
       <div className="text-center py-12">
         <h1 className="text-2xl font-bold mb-4">Tool Not Found</h1>
@@ -86,7 +87,7 @@ export default function ToolPage({ params }: { params: { tool: string } }) {
         return (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <p className="text-gray-600 dark:text-gray-400">
-              {tool.seo.description}
+              {toolData.seo.description}
             </p>
           </div>
         );
@@ -96,7 +97,7 @@ export default function ToolPage({ params }: { params: { tool: string } }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{tool.name}</h1>
+        <h1 className="text-3xl font-bold">{toolData.name}</h1>
       </div>
 
       {renderToolComponent()}

@@ -2,19 +2,20 @@ import { Metadata } from 'next';
 import { toolSections } from '@/data/toolSections';
 import ToolLayoutClient from './ToolLayoutClient';
 
-interface Props {
-  params: {
-    tool: string;
-  };
-}
+type Props = {
+  children: React.ReactNode;
+  params: Promise<{ tool: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { tool } = await params;
+  
   // Find the tool in our sections
-  const tool = toolSections
+  const toolData = toolSections
     .flatMap(section => section.tools)
-    .find(tool => tool.path === params.tool);
+    .find(t => t.path === tool);
 
-  if (!tool) {
+  if (!toolData) {
     return {
       title: 'Tool Not Found',
       description: 'The requested tool could not be found.',
@@ -22,26 +23,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: tool.seo.title,
-    description: tool.seo.description,
-    keywords: tool.seo.keywords.join(', '),
+    title: toolData.seo.title,
+    description: toolData.seo.description,
+    keywords: toolData.seo.keywords.join(', '),
     openGraph: {
-      title: tool.seo.title,
-      description: tool.seo.description,
+      title: toolData.seo.title,
+      description: toolData.seo.description,
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: tool.seo.title,
-      description: tool.seo.description,
+      title: toolData.seo.title,
+      description: toolData.seo.description,
     },
   };
 }
 
-export default function ToolLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function Layout({ children, params }: Props) {
+  await params;
   return <ToolLayoutClient>{children}</ToolLayoutClient>;
 } 
