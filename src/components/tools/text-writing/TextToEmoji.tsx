@@ -15,17 +15,17 @@ export default function TextToEmoji() {
     'laugh': '😂'
   };
 
-  const translateToEmoji = () => {
-    let result = text.toLowerCase();
+  // const translateToEmoji = () => {
+  //   let result = text.toLowerCase();
     
-    // Replace words with emojis
-    Object.entries(emojiMap).forEach(([word, emoji]) => {
-      const regex = new RegExp(`\\b${word}\\b`, 'gi');
-      result = result.replace(regex, emoji);
-    });
+  //   // Replace words with emojis
+  //   Object.entries(emojiMap).forEach(([word, emoji]) => {
+  //     const regex = new RegExp(`\\b${word}\\b`, 'gi');
+  //     result = result.replace(regex, emoji);
+  //   });
 
-    setEmojiText(result);
-  };
+  //   setEmojiText(result);
+  // };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(emojiText);

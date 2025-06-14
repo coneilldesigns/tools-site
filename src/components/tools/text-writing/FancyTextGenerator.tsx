@@ -28,9 +28,9 @@ export default function FancyTextGenerator() {
     setFancyText(result);
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(fancyText);
-  };
+  // const copyToClipboard = () => {
+  //   navigator.clipboard.writeText(fancyText);
+  // };
 
   return (
     <div className="space-y-6">
