@@ -1,8 +1,4 @@
-'use client';
-
-import { useParams } from 'next/navigation';
 import { toolSections } from '@/data/toolSections';
-import Head from 'next/head';
 import {
   // Unit Converters
   FeetToInches,
@@ -27,9 +23,8 @@ import {
   FancyTextGenerator
 } from '@/components/tools';
 
-export default function ToolPage() {
-  const params = useParams();
-  const toolPath = params.tool as string;
+export default function ToolPage({ params }: { params: { tool: string } }) {
+  const toolPath = params.tool;
 
   // Find the tool in our sections
   const tool = toolSections
@@ -99,20 +94,12 @@ export default function ToolPage() {
   };
 
   return (
-    <>
-      <Head>
-        <title>{tool.seo.title}</title>
-        <meta name="description" content={tool.seo.description} />
-        <meta name="keywords" content={tool.seo.keywords.join(', ')} />
-      </Head>
-
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">{tool.name}</h1>
-        </div>
-
-        {renderToolComponent()}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">{tool.name}</h1>
       </div>
-    </>
+
+      {renderToolComponent()}
+    </div>
   );
 } 

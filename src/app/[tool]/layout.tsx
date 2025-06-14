@@ -1,38 +1,47 @@
-'use client';
+import { Metadata } from 'next';
+import { toolSections } from '@/data/toolSections';
+import ToolLayoutClient from './ToolLayoutClient';
 
-import { useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Sidebar from "@/components/Sidebar";
+interface Props {
+  params: {
+    tool: string;
+  };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Find the tool in our sections
+  const tool = toolSections
+    .flatMap(section => section.tools)
+    .find(tool => tool.path === params.tool);
+
+  if (!tool) {
+    return {
+      title: 'Tool Not Found',
+      description: 'The requested tool could not be found.',
+    };
+  }
+
+  return {
+    title: tool.seo.title,
+    description: tool.seo.description,
+    keywords: tool.seo.keywords.join(', '),
+    openGraph: {
+      title: tool.seo.title,
+      description: tool.seo.description,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: tool.seo.title,
+      description: tool.seo.description,
+    },
+  };
+}
 
 export default function ToolLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header onMenuClick={toggleSidebar} />
-
-      {/* Main Content Area with Sidebar */}
-      <div className="flex flex-1 pt-16 pb-16 relative">
-        <Sidebar isOpen={isSidebarOpen} />
-
-        {/* Main Content */}
-        <main className="flex-1 md:ml-64 p-6 relative z-30 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
-            {children}
-          </div>
-        </main>
-      </div>
-
-      <Footer />
-    </div>
-  );
+  return <ToolLayoutClient>{children}</ToolLayoutClient>;
 } 

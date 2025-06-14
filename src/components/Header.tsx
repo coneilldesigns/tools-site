@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -9,7 +10,7 @@ interface HeaderProps {
 export default function Header({ onMenuClick }: HeaderProps) {
   return (
     <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <button
@@ -31,8 +32,20 @@ export default function Header({ onMenuClick }: HeaderProps) {
                 />
               </svg>
             </button>
-            <Link href="/" className="ml-4 text-xl font-bold text-gray-900 dark:text-white">
-              Tools & Utilities
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="relative w-8 h-8 flex-shrink-0">
+                <Image
+                  src="/everyday-tools-logo.svg"
+                  alt="Everyday Tools Logo"
+                  width={32}
+                  height={32}
+                  className="dark:invert"
+                  priority
+                />
+              </div>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                Tools & Utilities
+              </span>
             </Link>
           </div>
         </div>
