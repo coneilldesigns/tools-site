@@ -25,8 +25,8 @@ export default function ToolLayoutClient({
         <Sidebar isOpen={isSidebarOpen} />
 
         {/* Main Content */}
-        <main className="flex-1 md:ml-64 p-6 relative z-30 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 md:ml-64 relative z-30 overflow-y-auto">
+          <div className="mx-auto">
             {children}
           </div>
         </main>
