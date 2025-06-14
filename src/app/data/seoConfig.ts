@@ -1,14 +1,5 @@
 import { SEOConfig } from './types';
 
-export interface SEOConfig {
-  title: string;
-  description: string;
-  keywords: string[];
-  ogImage?: string;
-  ogType?: 'website' | 'article';
-  twitterCard?: 'summary' | 'summary_large_image';
-}
-
 export const defaultSEO: SEOConfig = {
   title: 'Tools Site - Free Online Tools',
   description: 'A collection of free online tools for everyday use. Convert units, calculate time zones, and more.',

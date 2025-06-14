@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { SEOConfig } from '@/app/data/seoConfig';
+import { SEOConfig } from '@/app/data/types';
 
 interface SEOProps {
   config: SEOConfig;

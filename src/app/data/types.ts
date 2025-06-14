@@ -3,6 +3,6 @@ export interface SEOConfig {
   description: string;
   keywords: string[];
   ogImage?: string;
-  ogType?: string;
-  twitterCard?: string;
+  ogType?: 'website' | 'article';
+  twitterCard?: 'summary' | 'summary_large_image';
 } 
