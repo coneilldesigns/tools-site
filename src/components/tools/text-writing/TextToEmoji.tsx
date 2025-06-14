@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 export default function TextToEmoji() {
   const [text, setText] = useState('');
-  const [emojiText, setEmojiText] = useState('');
 
   // Simple emoji mapping for common words
   const emojiMap: { [key: string]: string } = {
@@ -15,25 +14,20 @@ export default function TextToEmoji() {
     'laugh': '😂'
   };
 
-  // const translateToEmoji = () => {
-  //   let result = text.toLowerCase();
-    
-  //   // Replace words with emojis
-  //   Object.entries(emojiMap).forEach(([word, emoji]) => {
-  //     const regex = new RegExp(`\\b${word}\\b`, 'gi');
-  //     result = result.replace(regex, emoji);
-  //   });
-
-  //   setEmojiText(result);
-  // };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(emojiText);
+  const copyToClipboard = (textToCopy: string) => {
+    navigator.clipboard.writeText(textToCopy);
   };
 
   const emojiStyles = [
     { name: 'Original Text', transform: (text: string) => text },
-    { name: 'Emoji Text', transform: () => emojiText },
+    { name: 'Emoji Text', transform: (text: string) => {
+      let result = text.toLowerCase();
+      Object.entries(emojiMap).forEach(([word, emoji]) => {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        result = result.replace(regex, emoji);
+      });
+      return result;
+    }},
     { name: 'Simple Emoji Mapping', transform: (text: string) => {
       let result = text.toLowerCase();
       Object.entries(emojiMap).forEach(([word, emoji]) => {
