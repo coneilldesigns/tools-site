@@ -44,7 +44,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
                 />
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Tools & Utilities
+                Everyday Tools
               </span>
             </Link>
           </div>

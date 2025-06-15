@@ -3,9 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { format, toZonedTime } from 'date-fns-tz';
+import { formatInTimeZone } from 'date-fns-tz';
+import '@formatjs/intl-datetimeformat';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { TimezoneBoundaries } from './TimezoneBoundaries';
 
 // Fix for default marker icons in Leaflet with Next.js
 const DefaultIcon = L.icon({
@@ -51,7 +53,8 @@ export default function TimeZoneConverter() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [isGettingLocation, setIsGettingLocation] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -68,7 +71,34 @@ export default function TimeZoneConverter() {
     const getUserLocation = async () => {
       try {
         const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
+          navigator.geolocation.getCurrentPosition(
+            resolve,
+            (error) => {
+              // Handle specific geolocation errors
+              switch (error.code) {
+                case error.PERMISSION_DENIED:
+                  setLocationError('Location access denied. Please search for your location manually.');
+                  reject(new Error('Location permission denied'));
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  setLocationError('Location information unavailable. Please search for your location manually.');
+                  reject(new Error('Location information unavailable'));
+                  break;
+                case error.TIMEOUT:
+                  setLocationError('Location request timed out. Please search for your location manually.');
+                  reject(new Error('Location request timed out'));
+                  break;
+                default:
+                  setLocationError('Unable to get your location. Please search for your location manually.');
+                  reject(new Error('Unknown location error'));
+              }
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 5000,
+              maximumAge: 0
+            }
+          );
         });
 
         const { latitude, longitude } = position.coords;
@@ -87,10 +117,17 @@ export default function TimeZoneConverter() {
           label: data.display_name.split(',')[0],
           displayName: data.display_name
         });
+        setLocationError(null);
       } catch (error) {
         console.error('Error getting location:', error);
-      } finally {
-        setIsGettingLocation(false);
+        // Set a default location (e.g., UTC) when geolocation fails
+        setUserLocation({
+          id: 'user',
+          coordinates: [0, 0],
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+          label: 'Default Location',
+          displayName: 'Default Location (UTC)'
+        });
       }
     };
 
@@ -120,9 +157,11 @@ export default function TimeZoneConverter() {
 
     if (query.trim().length < 3) {
       setSuggestions([]);
+      setIsSearching(false);
       return;
     }
 
+    setIsSearching(true);
     searchTimeoutRef.current = setTimeout(async () => {
       try {
         const response = await fetch(
@@ -132,6 +171,8 @@ export default function TimeZoneConverter() {
         setSuggestions(data);
       } catch (error) {
         console.error('Error fetching suggestions:', error);
+      } finally {
+        setIsSearching(false);
       }
     }, 300);
   };
@@ -148,7 +189,32 @@ export default function TimeZoneConverter() {
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.lat}&lon=${suggestion.lon}&zoom=10`
       );
       const timezoneData = await timezoneResponse.json();
-      const timeZone = timezoneData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      
+      // Calculate timezone based on coordinates
+      const lat = parseFloat(suggestion.lat);
+      const lon = parseFloat(suggestion.lon);
+      
+      // Map coordinates to IANA timezone names
+      let timeZone = timezoneData.timezone;
+      
+      if (!timeZone) {
+        // Simple mapping of coordinates to timezone names
+        if (lat >= 0) { // Northern Hemisphere
+          if (lon >= -180 && lon < -120) timeZone = 'America/Anchorage';
+          else if (lon >= -120 && lon < -60) timeZone = 'America/New_York';
+          else if (lon >= -60 && lon < 0) timeZone = 'Europe/London';
+          else if (lon >= 0 && lon < 60) timeZone = 'Europe/London';
+          else if (lon >= 60 && lon < 120) timeZone = 'Asia/Shanghai';
+          else timeZone = 'Asia/Tokyo';
+        } else { // Southern Hemisphere
+          if (lon >= -180 && lon < -120) timeZone = 'Pacific/Auckland';
+          else if (lon >= -120 && lon < -60) timeZone = 'America/Santiago';
+          else if (lon >= -60 && lon < 0) timeZone = 'America/Sao_Paulo';
+          else if (lon >= 0 && lon < 60) timeZone = 'Africa/Johannesburg';
+          else if (lon >= 60 && lon < 120) timeZone = 'Asia/Singapore';
+          else timeZone = 'Australia/Sydney';
+        }
+      }
 
       const newLocation: Location = {
         id: userLocation ? 'comparison' : 'user',
@@ -190,16 +256,39 @@ export default function TimeZoneConverter() {
         className="w-full h-full"
       >
         <div className="relative w-full h-full bg-gray-900 overflow-hidden">
+          {/* Location Error Message */}
+          {locationError && (
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[1000] bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
+              {locationError}
+            </div>
+          )}
+
           {/* Map */}
           <MapContainer
             center={[0, 0]}
             zoom={2}
             className="w-full h-full"
             style={{ background: '#1a1a1a' }}
+            zoomControl={false}
+            dragging={false}
+            touchZoom={false}
+            doubleClickZoom={false}
+            scrollWheelZoom={false}
+            boxZoom={false}
+            keyboard={false}
+            attributionControl={false}
+            minZoom={2}
+            maxZoom={2}
           >
             <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            />
+            
+            {/* Timezone Boundaries */}
+            <TimezoneBoundaries 
+              timezoneData={[]} 
+              selectedTimezone={userLocation?.timeZone || null} 
             />
             
             {/* User Location Marker */}
@@ -235,8 +324,8 @@ export default function TimeZoneConverter() {
                 <Popup className="dark-popup">
                   <div className="p-2 bg-gray-800 text-white">
                     <h3 className="font-bold">{comparisonLocation.label}</h3>
-                    <p>{format(toZonedTime(currentTime, comparisonLocation.timeZone), 'h:mm:ss a', { timeZone: comparisonLocation.timeZone })}</p>
-                    <p>UTC{format(toZonedTime(currentTime, comparisonLocation.timeZone), 'xxx', { timeZone: comparisonLocation.timeZone })}</p>
+                    <p>{formatInTimeZone(currentTime, comparisonLocation.timeZone, 'h:mm:ss a')}</p>
+                    <p>UTC{formatInTimeZone(currentTime, comparisonLocation.timeZone, 'xxx')}</p>
                   </div>
                 </Popup>
               </Marker>
@@ -244,44 +333,40 @@ export default function TimeZoneConverter() {
           </MapContainer>
 
           {/* Search Box */}
-          <div className="absolute bottom-4 right-4 z-[1000] w-80">
-            <div className="flex flex-col gap-2">
-              <div className="relative">
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  placeholder={userLocation ? "Search for comparison location..." : "Search for your location..."}
-                  className="w-full px-4 py-2 bg-gray-800/90 backdrop-blur-sm text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {suggestions.length > 0 && (
-                  <div className="absolute bottom-full mb-2 w-full bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden">
-                    {suggestions.map((suggestion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 focus:outline-none"
-                      >
-                        {suggestion.display_name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              {searchError && (
-                <p className="text-red-500 text-sm">{searchError}</p>
-              )}
-              {isGettingLocation && !userLocation && (
-                <p className="text-blue-400 text-sm">Getting your location...</p>
-              )}
-              {!isGettingLocation && !userLocation && (
-                <p className="text-yellow-400 text-sm">Search for your location to begin</p>
-              )}
-              {userLocation && !comparisonLocation && (
-                <p className="text-green-400 text-sm">Now search for another location to compare times</p>
+          <div className="absolute bottom-4 left-4 z-[1000] w-80">
+            <div className="relative">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search location..."
+                className="w-full px-4 py-2 bg-gray-800/90 backdrop-blur-sm text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 border border-gray-700"
+              />
+              {isSearching && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-emerald-500 border-t-transparent"></div>
+                </div>
               )}
             </div>
+            {suggestions.length > 0 && (
+              <div className="absolute bottom-full mb-2 w-full bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden border border-gray-700">
+                {suggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                  >
+                    {suggestion.display_name}
+                  </button>
+                ))}
+              </div>
+            )}
+            {searchError && (
+              <div className="absolute bottom-full mb-2 w-full px-4 py-2 bg-red-500/90 backdrop-blur-sm text-white rounded-lg">
+                {searchError}
+              </div>
+            )}
           </div>
 
           {/* Location Info Boxes */}
@@ -318,30 +403,25 @@ export default function TimeZoneConverter() {
                 <h3 className="font-bold mb-2">My Location</h3>
                 <p className="text-sm text-gray-400">{userLocation.displayName}</p>
                 <p className="text-sm text-gray-400">Lat: {userLocation.coordinates[0].toFixed(4)}, Long: {userLocation.coordinates[1].toFixed(4)}</p>
-                <p className="text-lg mt-2">
-                  {new Date().toLocaleTimeString('en-US', { 
-                    timeZone: userLocation.timeZone,
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true 
-                  })}
-                </p>
-                <p className="text-sm text-gray-400">
-                  {new Date().toLocaleDateString('en-US', { 
-                    timeZone: userLocation.timeZone,
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </p>
-                <p className="text-sm text-gray-400">
-                  {new Date().toLocaleString('en-US', { 
-                    timeZone: userLocation.timeZone,
-                    timeZoneName: 'short'
-                  }).split(' ').pop()}
-                </p>
+                {(() => {
+                  const now = new Date();
+                  return (
+                    <>
+                      <p className="text-lg mt-2">
+                        {formatInTimeZone(now, userLocation.timeZone, 'h:mm:ss a')}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {formatInTimeZone(now, userLocation.timeZone, 'EEEE, MMMM d, yyyy')}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {formatInTimeZone(now, userLocation.timeZone, 'z')}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {formatInTimeZone(now, userLocation.timeZone, 'XXX')}
+                      </p>
+                    </>
+                  );
+                })()}
               </motion.div>
             )}
 
@@ -373,38 +453,43 @@ export default function TimeZoneConverter() {
                 <h3 className="font-bold mb-2">{comparisonLocation.label}</h3>
                 <p className="text-sm text-gray-400">{comparisonLocation.displayName}</p>
                 <p className="text-sm text-gray-400">Lat: {comparisonLocation.coordinates[0].toFixed(4)}, Long: {comparisonLocation.coordinates[1].toFixed(4)}</p>
-                <p className="text-lg mt-2">
-                  {new Date().toLocaleTimeString('en-US', { 
+                {(() => {
+                  const now = new Date();
+                  console.log('comparisonLocation', comparisonLocation)
+                  console.log('Comparison Location Time Debug:', {
                     timeZone: comparisonLocation.timeZone,
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true 
-                  })}
-                </p>
-                <p className="text-sm text-gray-400">
-                  {new Date().toLocaleDateString('en-US', { 
-                    timeZone: comparisonLocation.timeZone,
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </p>
-                <p className="text-sm text-gray-400">
-                  {new Date().toLocaleString('en-US', { 
-                    timeZone: comparisonLocation.timeZone,
-                    timeZoneName: 'short'
-                  }).split(' ').pop()}
-                </p>
-                {userLocation && (
-                  <p className="text-sm text-gray-400 mt-1">
-                    {Math.round(
-                      (new Date().getTime() - 
-                       new Date(new Date().toLocaleString('en-US', { timeZone: userLocation.timeZone })).getTime()) / (1000 * 60 * 60)
-                    )} hours from your time
-                  </p>
-                )}
+                    localTime: now.toISOString(),
+                    localTimeString: now.toString(),
+                    localTimeLocale: now.toLocaleString(),
+                    formattedTime: formatInTimeZone(now, comparisonLocation.timeZone, 'h:mm:ss a'),
+                    formattedTimeWithOffset: formatInTimeZone(now, comparisonLocation.timeZone, 'yyyy-MM-dd HH:mm:ss XXX'),
+                    formattedTimeWithZone: formatInTimeZone(now, comparisonLocation.timeZone, 'yyyy-MM-dd HH:mm:ss zzz')
+                  });
+                  return (
+                    <>
+                      <p className="text-lg mt-2">
+                        {formatInTimeZone(now, comparisonLocation.timeZone, 'h:mm:ss a')}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {formatInTimeZone(now, comparisonLocation.timeZone, 'EEEE, MMMM d, yyyy')}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {formatInTimeZone(now, comparisonLocation.timeZone, 'z')}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {formatInTimeZone(now, comparisonLocation.timeZone, 'XXX')}
+                      </p>
+                      {userLocation && (
+                        <p className="text-sm text-gray-400 mt-1">
+                          {Math.round(
+                            (new Date(formatInTimeZone(now, comparisonLocation.timeZone, 'yyyy-MM-dd HH:mm:ss')).getTime() - 
+                             new Date(formatInTimeZone(now, userLocation.timeZone, 'yyyy-MM-dd HH:mm:ss')).getTime()) / (1000 * 60 * 60)
+                          )} hours from your time
+                        </p>
+                      )}
+                    </>
+                  );
+                })()}
               </motion.div>
             )}
           </div>

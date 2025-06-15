@@ -5,9 +5,10 @@ import { differenceInDays, differenceInMonths, differenceInYears } from 'date-fn
 import { motion, AnimatePresence } from 'framer-motion';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { calendarStyles } from './sharedStyles';
 
 const darkTheme = createTheme({
   palette: {
@@ -132,45 +133,29 @@ export default function DaysBetweenDates() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
             onClick={() => setShowStartModal(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-gray-900 p-6 rounded-lg shadow-xl"
+              className="w-full h-full bg-gray-900 flex items-center justify-center"
               onClick={e => e.stopPropagation()}
             >
               <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                  <StaticDatePicker
                     value={startDate}
                     onChange={(newValue) => {
-                      setStartDate(newValue ?? startDate);
-                      setShowStartModal(false);
+                      if (newValue) {
+                        setStartDate(newValue);
+                        setShowStartModal(false);
+                      }
                     }}
                     maxDate={endDate}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        variant: "outlined",
-                        sx: {
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              borderColor: 'rgba(255, 255, 255, 0.23)',
-                            },
-                            '&:hover fieldset': {
-                              borderColor: 'rgba(255, 255, 255, 0.5)',
-                            },
-                            '&.Mui-focused fieldset': {
-                              borderColor: '#10B981',
-                            },
-                          },
-                        },
-                      },
-                    }}
+                    sx={calendarStyles}
                   />
                 </LocalizationProvider>
               </ThemeProvider>
@@ -186,45 +171,29 @@ export default function DaysBetweenDates() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
             onClick={() => setShowEndModal(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-gray-900 p-6 rounded-lg shadow-xl"
+              className="w-full h-full bg-gray-900 flex items-center justify-center"
               onClick={e => e.stopPropagation()}
             >
               <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                  <StaticDatePicker
                     value={endDate}
                     onChange={(newValue) => {
-                      setEndDate(newValue ?? endDate);
-                      setShowEndModal(false);
+                      if (newValue) {
+                        setEndDate(newValue);
+                        setShowEndModal(false);
+                      }
                     }}
                     minDate={startDate}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        variant: "outlined",
-                        sx: {
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              borderColor: 'rgba(255, 255, 255, 0.23)',
-                            },
-                            '&:hover fieldset': {
-                              borderColor: 'rgba(255, 255, 255, 0.5)',
-                            },
-                            '&.Mui-focused fieldset': {
-                              borderColor: '#10B981',
-                            },
-                          },
-                        },
-                      },
-                    }}
+                    sx={calendarStyles}
                   />
                 </LocalizationProvider>
               </ThemeProvider>

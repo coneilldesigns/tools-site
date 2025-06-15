@@ -22,6 +22,26 @@ import {
   TextToEmoji,
   FancyTextGenerator
 } from '@/components/tools';
+import Script from 'next/script';
+
+const MediaNetAd = () => {
+  return (
+    <div id="media-net-ad" className="w-full">
+      <Script id="media-net-init" strategy="afterInteractive">
+        {`
+          window._mNHandle = window._mNHandle || {};
+          window._mNHandle.queue = window._mNHandle.queue || [];
+          medianet_versionId = "3121199";
+        `}
+      </Script>
+      <Script 
+        src="//contextual.media.net/dmedianet.js?cid=YOUR_PUBLISHER_ID" 
+        strategy="afterInteractive"
+      />
+      <div id="YOUR_AD_UNIT_ID"></div>
+    </div>
+  );
+};
 
 export default async function ToolPage({ params }: { params: Promise<{ tool: string }> }) {
   const { tool } = await params;
@@ -103,7 +123,7 @@ export default async function ToolPage({ params }: { params: Promise<{ tool: str
       {renderToolComponent()}
 
       <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
-        Google ads here
+        <MediaNetAd />
       </div>
     </div>
   );
