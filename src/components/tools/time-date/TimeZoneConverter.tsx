@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -53,86 +53,102 @@ export default function TimeZoneConverter() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [isSearching, setIsSearching] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Helper function to set default location
+  const setDefaultLocation = useCallback(() => {
+    const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    setUserLocation({
+      id: 'user',
+      coordinates: [0, 0],
+      timeZone: defaultTimeZone,
+      label: 'Default Location',
+      displayName: `Default Location (${defaultTimeZone})`
+    });
+  }, []); // Empty dependency array since we're only using setUserLocation which is stable
+
+  // Move getUserLocation into useCallback
+  const getUserLocation = useCallback(async () => {
+    try {
+      // First check if geolocation is supported
+      if (!navigator.geolocation) {
+        setLocationError('Geolocation is not supported by your browser. Please search for your location manually or ');
+        setDefaultLocation();
+        return;
+      }
+
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          (error) => {
+            // Handle specific geolocation errors
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                setLocationError('Location access denied. You can enable location access in your browser settings or ');
+                setDefaultLocation();
+                reject(new Error('Location permission denied'));
+                break;
+              case error.POSITION_UNAVAILABLE:
+                setLocationError('Location information unavailable. Please check your device settings or ');
+                setDefaultLocation();
+                reject(new Error('Location information unavailable'));
+                break;
+              case error.TIMEOUT:
+                setLocationError('Location request timed out. Please check your internet connection or ');
+                setDefaultLocation();
+                reject(new Error('Location request timed out'));
+                break;
+              default:
+                setLocationError('Unable to get your location. Please check your device settings or ');
+                setDefaultLocation();
+                reject(new Error('Unknown location error'));
+            }
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      // Get location details from coordinates
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
+      );
+      const data = await response.json();
+      const timeZone = data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+
+      setUserLocation({
+        id: 'user',
+        coordinates: [latitude, longitude],
+        timeZone,
+        label: data.display_name.split(',')[0],
+        displayName: data.display_name
+      });
+      setLocationError(null);
+    } catch (error) {
+      console.error('Error getting location:', error);
+      setDefaultLocation();
+    }
+  }, [setDefaultLocation]); // Include setDefaultLocation in dependencies
+
+  useEffect(() => {
+    if (isClient) {
+      getUserLocation();
+    }
+  }, [isClient, getUserLocation]);
 
   // Set isClient to true on mount
   useEffect(() => {
     setIsClient(true);
     setCurrentTime(new Date());
   }, []);
-
-  // Try to get user's location on mount
-  useEffect(() => {
-    if (!isClient) return;
-
-    const getUserLocation = async () => {
-      try {
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(
-            resolve,
-            (error) => {
-              // Handle specific geolocation errors
-              switch (error.code) {
-                case error.PERMISSION_DENIED:
-                  setLocationError('Location access denied. Please search for your location manually.');
-                  reject(new Error('Location permission denied'));
-                  break;
-                case error.POSITION_UNAVAILABLE:
-                  setLocationError('Location information unavailable. Please search for your location manually.');
-                  reject(new Error('Location information unavailable'));
-                  break;
-                case error.TIMEOUT:
-                  setLocationError('Location request timed out. Please search for your location manually.');
-                  reject(new Error('Location request timed out'));
-                  break;
-                default:
-                  setLocationError('Unable to get your location. Please search for your location manually.');
-                  reject(new Error('Unknown location error'));
-              }
-            },
-            {
-              enableHighAccuracy: true,
-              timeout: 5000,
-              maximumAge: 0
-            }
-          );
-        });
-
-        const { latitude, longitude } = position.coords;
-
-        // Get location details from coordinates
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
-        );
-        const data = await response.json();
-        const timeZone = data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-
-        setUserLocation({
-          id: 'user',
-          coordinates: [latitude, longitude],
-          timeZone,
-          label: data.display_name.split(',')[0],
-          displayName: data.display_name
-        });
-        setLocationError(null);
-      } catch (error) {
-        console.error('Error getting location:', error);
-        // Set a default location (e.g., UTC) when geolocation fails
-        setUserLocation({
-          id: 'user',
-          coordinates: [0, 0],
-          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-          label: 'Default Location',
-          displayName: 'Default Location (UTC)'
-        });
-      }
-    };
-
-    getUserLocation();
-  }, [isClient]);
 
   // Update current time every second
   useEffect(() => {
@@ -258,8 +274,27 @@ export default function TimeZoneConverter() {
         <div className="relative w-full h-full bg-gray-900 overflow-hidden">
           {/* Location Error Message */}
           {locationError && (
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[1000] bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
-              {locationError}
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[1000] bg-red-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg text-sm max-w-md">
+              <div className="flex items-start gap-2">
+                <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div>
+                  {locationError}
+                  <button
+                    onClick={() => {
+                      setLocationError(null);
+                      getUserLocation();
+                    }}
+                    className="text-white underline hover:text-gray-200 ml-1"
+                  >
+                    try again
+                  </button>
+                  <div className="text-xs mt-1 text-gray-200">
+                    You can also search for your location using the search box below.
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

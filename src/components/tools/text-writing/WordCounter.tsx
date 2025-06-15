@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 export default function WordCounter() {
   const [text, setText] = useState('');
@@ -34,34 +35,70 @@ export default function WordCounter() {
   }, [text]);
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-        <div className="space-y-4">
+    <div className="flex flex-col w-full h-full m-0">
+      {/* Text Input Area */}
+      <div className="flex w-full flex-1 border-b border-gray-800">
+        <div className="relative w-full h-full">
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter your text here..."
-            className="w-full h-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full h-full px-6 py-4 bg-transparent text-white text-lg md:text-xl resize-none focus:outline-none"
           />
+        </div>
+      </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Words</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.words}</div>
-            </div>
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Characters</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.characters}</div>
-            </div>
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Sentences</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.sentences}</div>
-            </div>
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Paragraphs</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.paragraphs}</div>
-            </div>
-          </div>
+      {/* Stats Display Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-5 w-full flex-1">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Words</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.words}</div>
+          </motion.div>
+        </div>
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Characters</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.characters}</div>
+          </motion.div>
+        </div>
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Sentences</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.sentences}</div>
+          </motion.div>
+        </div>
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Paragraphs</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.paragraphs}</div>
+          </motion.div>
+        </div>
+        <div className="relative h-full flex flex-col items-center justify-center">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Reading Time</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.readingTime}m</div>
+          </motion.div>
         </div>
       </div>
     </div>

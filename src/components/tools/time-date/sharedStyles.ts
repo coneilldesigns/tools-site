@@ -3,7 +3,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 export const calendarStyles: SxProps<Theme> = {
   width: '100%',
   height: '100%',
-  '& .MuiPickersToolbar-root': {
+  '& .MuiDateTimePickerToolbar-root': {
     borderBottom: '1px solid #364152',
   },
   '& .MuiPickersCalendarHeader-root': {
@@ -39,12 +39,19 @@ export const calendarStyles: SxProps<Theme> = {
     height: '100%',
     flex: 1,
   },
+  '& .MuiDateTimePickerToolbar-dateContainer, & .MuiDateTimePickerToolbar-timeContainer': {
+    flex: 1
+  },
   '& .MuiPickersSlideTransition-root': {
     width: '100%',
     height: '100%',
     flex: 1,
   },
   '& .MuiDayCalendar-monthContainer': {
+    width: '100%',
+    height: '100%',
+  },
+  '& .MuiMultiSectionDigitalClock-root': {
     width: '100%',
     height: '100%',
   },
@@ -60,7 +67,7 @@ export const calendarStyles: SxProps<Theme> = {
   '& .MuiPickersFadeTransitionGroup-root > div': {
     height: '100%',
   },
-  '& .MuiButtonBase-root, & .MuiPickersDay-hiddenDaySpacingFiller': {
+  '& .MuiDayCalendar-root .MuiButtonBase-root, & .MuiPickersDay-hiddenDaySpacingFiller': {
     borderRadius: '0px',
     height: '100%',
     fontSize: '1.5rem',
@@ -71,16 +78,16 @@ export const calendarStyles: SxProps<Theme> = {
     width: 'calc(100% / 7)',
     backgroundColor: '#151c26',
   },
-  '& .MuiButtonBase-root.Mui-selected': {
+  '& .MuiDayCalendar-root .MuiButtonBase-root.Mui-selected': {
     borderRadius: '0px',
     color: '#FFF',
     backgroundColor: '#1F2937',
   },
-  '& .MuiButtonBase-root:hover': {
+  '& .MuiDayCalendar-root .MuiButtonBase-root:hover': {
     color: '#FFF',
     backgroundColor: '#1F2937',
   },
-  '& .MuiButtonBase-root.MuiPickersDay-today': {
+  '& .MuiDayCalendar-root .MuiButtonBase-root.MuiPickersDay-today': {
     backgroundColor: '#FFF',
     color: '#000',
   },

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { calendarStyles } from './sharedStyles';
@@ -26,6 +26,7 @@ export default function CountdownTimer() {
   const [targetDateTime, setTargetDateTime] = useState<Date>(() => {
     const now = new Date();
     now.setDate(now.getDate() + 10);
+    now.setHours(0, 0, 0, 0);
     return now;
   });
   const [timeLeft, setTimeLeft] = useState({
@@ -155,17 +156,15 @@ export default function CountdownTimer() {
               <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <StaticDatePicker
+                  <StaticDateTimePicker
                     value={targetDateTime}
                     onChange={(newValue) => {
                       if (newValue) {
-                        const newDate = new Date(newValue);
-                        newDate.setHours(0, 0, 0, 0);
-                        setTargetDateTime(newDate);
+                        setTargetDateTime(newValue);
                         setShowModal(false);
                       }
                     }}
-                    minDate={new Date()}
+                    minDateTime={new Date()}
                     sx={calendarStyles}
                   />
                 </LocalizationProvider>
