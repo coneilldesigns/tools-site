@@ -1,134 +1,194 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#10B981', // emerald-500
+    },
+    background: {
+      default: '#111827', // gray-900
+      paper: '#1F2937', // gray-800
+    },
+  },
+});
 
 export default function CountdownTimer() {
-  const [targetDate, setTargetDate] = useState('');
-  const [targetTime, setTargetTime] = useState('');
+  const [targetDateTime, setTargetDateTime] = useState<Date>(() => {
+    const now = new Date();
+    now.setDate(now.getDate() + 10);
+    return now;
+  });
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0
   });
-  const [isRunning, setIsRunning] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    interval = setInterval(() => {
+      const now = new Date().getTime();
+      const target = targetDateTime.getTime();
+      const difference = target - now;
 
-    if (isRunning) {
-      interval = setInterval(() => {
-        const now = new Date().getTime();
-        const target = new Date(`${targetDate}T${targetTime}`).getTime();
-        const difference = target - now;
+      if (difference <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
 
-        if (difference <= 0) {
-          setIsRunning(false);
-          setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-          return;
-        }
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        setTimeLeft({ days, hours, minutes, seconds });
-      }, 1000);
-    }
-
+      setTimeLeft({ days, hours, minutes, seconds });
+    }, 1000);
     return () => clearInterval(interval);
-  }, [isRunning, targetDate, targetTime]);
+  }, [targetDateTime]);
 
-  const handleStart = () => {
-    if (targetDate && targetTime) {
-      setIsRunning(true);
-    }
-  };
-
-  const handleStop = () => {
-    setIsRunning(false);
-  };
-
-  const handleReset = () => {
-    setIsRunning(false);
-    setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const formatDateTime = (date: Date | null) => {
+    if (!date) return 'Select Date & Time';
+    return date.toLocaleString('en-US', {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="targetDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Target Date
-              </label>
-              <input
-                type="date"
-                id="targetDate"
-                value={targetDate}
-                onChange={(e) => setTargetDate(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-              />
+    <div className="flex flex-col w-full h-full m-0">
+      {/* Date and Time Display Row */}
+      <div className="flex w-full flex-1 border-b border-gray-800">
+        <div className="relative w-full h-full flex items-center justify-center">
+          <motion.div 
+            className="w-full h-full flex items-center justify-center cursor-pointer"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            onClick={() => setShowModal(true)}
+          >
+            <div className="text-white text-2xl md:text-5xl font-bold">
+              {formatDateTime(targetDateTime)}
             </div>
-            <div>
-              <label htmlFor="targetTime" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Target Time
-              </label>
-              <input
-                type="time"
-                id="targetTime"
-                value={targetTime}
-                onChange={(e) => setTargetTime(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <button
-              onClick={handleStart}
-              disabled={isRunning || !targetDate || !targetTime}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Start
-            </button>
-            <button
-              onClick={handleStop}
-              disabled={!isRunning}
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Stop
-            </button>
-            <button
-              onClick={handleReset}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-            >
-              Reset
-            </button>
-          </div>
-
-          <div className="grid grid-cols-4 gap-4">
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Days</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{timeLeft.days}</div>
-            </div>
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Hours</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{timeLeft.hours}</div>
-            </div>
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Minutes</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{timeLeft.minutes}</div>
-            </div>
-            <div className="p-4 rounded-lg bg-white dark:bg-gray-700 shadow-sm">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Seconds</div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-white">{timeLeft.seconds}</div>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </div>
+
+      {/* Time Display Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 w-full flex-1">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Days</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.days}</div>
+          </motion.div>
+        </div>
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Hours</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.hours}</div>
+          </motion.div>
+        </div>
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-gray-800">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Minutes</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.minutes}</div>
+          </motion.div>
+        </div>
+        <div className="relative h-full flex flex-col items-center justify-center">
+          <motion.div 
+            className="w-full h-full flex flex-col items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Seconds</div>
+            <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.seconds}</div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setShowModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-gray-900 p-6 rounded-lg shadow-xl"
+              onClick={e => e.stopPropagation()}
+            >
+              <ThemeProvider theme={darkTheme}>
+                <CssBaseline />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateTimePicker
+                    value={targetDateTime}
+                    onChange={(newValue) => {
+                      setTargetDateTime(newValue ?? (() => {
+                        const now = new Date();
+                        now.setDate(now.getDate() + 10);
+                        return now;
+                      })());
+                      setShowModal(false);
+                    }}
+                    minDateTime={new Date()}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        variant: "outlined",
+                        sx: {
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: 'rgba(255, 255, 255, 0.23)',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'rgba(255, 255, 255, 0.5)',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: '#10B981',
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 } 

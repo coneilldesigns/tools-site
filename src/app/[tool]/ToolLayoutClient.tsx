@@ -21,12 +21,12 @@ export default function ToolLayoutClient({
       <Header onMenuClick={toggleSidebar} />
 
       {/* Main Content Area with Sidebar */}
-      <div className="flex flex-1 pt-16 pb-16 relative">
+      <div className="flex flex-1 pt-16 pb-15 relative">
         <Sidebar isOpen={isSidebarOpen} />
 
         {/* Main Content */}
         <main className="flex-1 md:ml-64 relative z-30 overflow-y-auto">
-          <div className="mx-auto">
+          <div className="mx-auto h-full">
             {children}
           </div>
         </main>

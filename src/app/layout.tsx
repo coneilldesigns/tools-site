@@ -11,15 +11,15 @@ export const metadata: Metadata = {
   },
   description: "A collection of free online tools and utilities for everyday tasks. Convert units, calculate dates, format text, and more.",
   keywords: "online tools, utilities, converters, calculators, free tools",
-  authors: [{ name: 'Conor O\'Neill' }],
-  creator: 'Conor O\'Neill',
+  authors: [{ name: 'CO' }],
+  creator: 'CO',
   publisher: 'Tools & Utilities',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://tools-site.vercel.app'),
+  metadataBase: new URL('https://www.everyday-tools.dev/'),
   openGraph: {
     type: 'website',
     siteName: 'Tools & Utilities',

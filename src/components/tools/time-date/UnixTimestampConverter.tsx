@@ -2,14 +2,31 @@
 
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { motion, AnimatePresence } from 'framer-motion';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#10B981', // emerald-500
+    },
+    background: {
+      default: '#111827', // gray-900
+      paper: '#1F2937', // gray-800
+    },
+  },
+});
 
 export default function UnixTimestampConverter() {
   const [timestamp, setTimestamp] = useState<string>('');
-  const [date, setDate] = useState<string>('');
-  const [convertedDate, setConvertedDate] = useState<string>('');
-  const [convertedTimestamp, setConvertedTimestamp] = useState<string>('');
+  const [date, setDate] = useState<Date>(new Date());
+  const [showModal, setShowModal] = useState(false);
   const [timestampError, setTimestampError] = useState<string>('');
-  const [dateError, setDateError] = useState<string>('');
 
   useEffect(() => {
     if (timestamp) {
@@ -17,86 +34,117 @@ export default function UnixTimestampConverter() {
         const date = new Date(parseInt(timestamp) * 1000);
         if (isNaN(date.getTime())) {
           setTimestampError('Invalid timestamp');
-          setConvertedDate('');
         } else {
           setTimestampError('');
-          setConvertedDate(format(date, 'yyyy-MM-dd HH:mm:ss'));
+          setDate(date);
         }
       } catch {
         setTimestampError('Invalid timestamp');
-        setConvertedDate('');
       }
     }
   }, [timestamp]);
 
-  useEffect(() => {
-    if (date) {
-      try {
-        const timestamp = Math.floor(new Date(date).getTime() / 1000);
-        if (isNaN(timestamp)) {
-          setDateError('Invalid date');
-          setConvertedTimestamp('');
-        } else {
-          setDateError('');
-          setConvertedTimestamp(timestamp.toString());
-        }
-      } catch {
-        setDateError('Invalid date');
-        setConvertedTimestamp('');
-      }
+  const handleDateChange = (newDate: Date | null) => {
+    if (newDate) {
+      setDate(newDate);
+      setTimestamp(Math.floor(newDate.getTime() / 1000).toString());
+      setTimestampError('');
     }
-  }, [date]);
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="timestamp" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Unix Timestamp
-            </label>
-            <input
-              type="text"
-              id="timestamp"
-              value={timestamp}
-              onChange={(e) => setTimestamp(e.target.value)}
-              placeholder="Enter Unix timestamp"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-            />
-            {timestampError && (
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{timestampError}</p>
-            )}
-            {convertedDate && (
-              <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Converted Date:</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">{convertedDate}</p>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Date
-            </label>
-            <input
-              type="datetime-local"
-              id="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white px-4 py-2"
-            />
-            {dateError && (
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{dateError}</p>
-            )}
-            {convertedTimestamp && (
-              <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Converted Timestamp:</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">{convertedTimestamp}</p>
-              </div>
-            )}
-          </div>
+    <div className="flex flex-col w-full h-full m-0">
+      {/* Timestamp Input Row */}
+      <div className="flex w-full flex-1 border-b border-gray-800">
+        <div className="relative w-full h-full flex items-center justify-center">
+          <motion.div 
+            className="w-full h-full flex items-center justify-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <div className="relative w-full max-w-md">
+              <input
+                type="text"
+                value={timestamp}
+                onChange={(e) => setTimestamp(e.target.value)}
+                placeholder="Enter Unix timestamp"
+                className="w-full text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white text-2xl md:text-4xl font-bold placeholder-gray-600"
+              />
+              {timestampError && (
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-red-500 text-sm">
+                  {timestampError}
+                </div>
+              )}
+            </div>
+          </motion.div>
         </div>
       </div>
+
+      {/* Date Display Row */}
+      <div className="flex w-full flex-1">
+        <div className="relative w-full h-full flex items-center justify-center">
+          <motion.div 
+            className="w-full h-full flex items-center justify-center cursor-pointer"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            onClick={() => setShowModal(true)}
+          >
+            <div className="text-white text-2xl md:text-5xl font-bold">
+              {format(date, 'yyyy-MM-dd HH:mm:ss')}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setShowModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-gray-900 p-6 rounded-lg shadow-xl"
+              onClick={e => e.stopPropagation()}
+            >
+              <ThemeProvider theme={darkTheme}>
+                <CssBaseline />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateTimePicker
+                    value={date}
+                    onChange={handleDateChange}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        variant: "outlined",
+                        sx: {
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: 'rgba(255, 255, 255, 0.23)',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'rgba(255, 255, 255, 0.5)',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: '#10B981',
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 } 

@@ -95,12 +95,16 @@ export default async function ToolPage({ params }: { params: Promise<{ tool: str
   };
 
   return (
-    <div className="space-y-6">
-      {/* <div className="flex items-center justify-between">
+    <div className="space-y-6 h-full flex flex-col">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between mb-0">
         <h1 className="text-3xl font-bold">{toolData.name}</h1>
-      </div> */}
+      </div>
 
       {renderToolComponent()}
+
+      <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+        Google ads here
+      </div>
     </div>
   );
 } 
