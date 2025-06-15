@@ -36,25 +36,27 @@ export default function CountdownTimer() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    interval = setInterval(() => {
-      const now = new Date().getTime();
-      const target = targetDateTime.getTime();
-      const difference = target - now;
+    if (targetDateTime) {
+      const interval = setInterval(() => {
+        const now = new Date();
+        const difference = targetDateTime.getTime() - now.getTime();
+        
+        if (difference <= 0) {
+          setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+          clearInterval(interval);
+          return;
+        }
 
-      if (difference <= 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        return;
-      }
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60)
+        });
+      }, 1000);
 
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-      setTimeLeft({ days, hours, minutes, seconds });
-    }, 1000);
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
   }, [targetDateTime]);
 
   const formatDateTime = (date: Date | null) => {

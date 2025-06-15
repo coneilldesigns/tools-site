@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { format, toZonedTime } from 'date-fns-tz';
-import { differenceInHours } from 'date-fns';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -51,7 +50,6 @@ export default function TimeZoneConverter() {
   const [comparisonLocation, setComparisonLocation] = useState<Location | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [isGettingLocation, setIsGettingLocation] = useState(true);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -139,7 +137,6 @@ export default function TimeZoneConverter() {
   };
 
   const handleSuggestionClick = async (suggestion: Suggestion) => {
-    setIsSearching(true);
     setSearchError(null);
     setSuggestions([]);
 
@@ -170,7 +167,6 @@ export default function TimeZoneConverter() {
       console.error('Error setting location:', error);
       setSearchError('Failed to set location. Please try again.');
     } finally {
-      setIsSearching(false);
       setSearchQuery('');
     }
   };
