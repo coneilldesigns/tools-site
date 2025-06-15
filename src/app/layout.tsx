@@ -62,6 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="google-adsense-account" content="ca-pub-7722207431324039" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-9RQM1SLE8W"
           strategy="afterInteractive"
