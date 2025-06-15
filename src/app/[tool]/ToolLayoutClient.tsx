@@ -22,7 +22,10 @@ export default function ToolLayoutClient({
 
       {/* Main Content Area with Sidebar */}
       <div className="flex flex-1 pt-16 pb-15 relative">
-        <Sidebar isOpen={isSidebarOpen} />
+        <Sidebar 
+          isOpen={isSidebarOpen} 
+          onClose={() => setIsSidebarOpen(false)} 
+        />
 
         {/* Main Content */}
         <main className="flex-1 md:ml-64 relative z-30 overflow-y-auto">
