@@ -37,9 +37,19 @@ export default function CountdownTimer() {
   });
   const [showModal, setShowModal] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
 
+  // Effect to update total duration when target date changes
   useEffect(() => {
     if (targetDateTime) {
+      const initialDuration = targetDateTime.getTime() - new Date().getTime();
+      setTotalDuration(initialDuration);
+    }
+  }, [targetDateTime]);
+
+  // Effect for the countdown timer
+  useEffect(() => {
+    if (targetDateTime && totalDuration > 0) {
       const interval = setInterval(() => {
         const now = new Date();
         const difference = targetDateTime.getTime() - now.getTime();
@@ -51,8 +61,7 @@ export default function CountdownTimer() {
           return;
         }
 
-        // Calculate progress percentage based on remaining time
-        const totalDuration = 10 * 24 * 60 * 60 * 1000; // 10 days in milliseconds
+        // Calculate progress percentage based on the initial total duration
         const remaining = difference;
         const percentage = 100 - Math.min(100, Math.max(0, (remaining / totalDuration) * 100));
         setProgress(percentage);
@@ -67,7 +76,7 @@ export default function CountdownTimer() {
 
       return () => clearInterval(interval);
     }
-  }, [targetDateTime]);
+  }, [targetDateTime, totalDuration]);
 
   const formatDateTime = (date: Date | null) => {
     if (!date) return 'Select Date & Time';
@@ -84,6 +93,13 @@ export default function CountdownTimer() {
 
   return (
     <div className="flex flex-col w-full h-full m-0">
+      {/* Title and Content */}
+      <div className="flex w-full flex-1 border-b border-gray-800">
+        <div className="relative w-full h-full flex flex-col items-center justify-center p-4">
+          <h1 className="text-white text-3xl font-bold mb-4">Countdown Timer</h1>
+        </div>
+      </div>
+
       {/* Date and Time Display Row */}
       <div className="flex w-full flex-1 border-b border-gray-800">
         <div className="relative w-full h-full flex items-center justify-center">

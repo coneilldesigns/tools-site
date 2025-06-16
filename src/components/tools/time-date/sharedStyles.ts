@@ -57,6 +57,7 @@ export const calendarStyles: SxProps<Theme> = {
     alignItems: 'center',
     margin: '0px',
     padding: '0px',
+    borderBottom: '1px solid #364152',
   },
   '& .MuiPickersFadeTransitionGroup-root': {
     width: '100%',
@@ -97,11 +98,13 @@ export const calendarStyles: SxProps<Theme> = {
     height: '100%',
     fontSize: '1.5rem',
     borderRight: '1px solid #364152',
-    borderBottom: '1px solid #364152',
     margin: '0px',
     padding: '0px',
     width: 'calc(100% / 7)',
-    // backgroundColor: '#151c26',
+    opacity: '1',
+  },
+  '& .MuiPickersDay-hiddenDaySpacingFiller': {
+    backgroundColor: '#141C26',
   },
   // '& .MuiYearCalendar-root': {
   //   width: '100%',

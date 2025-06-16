@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from 'next/script';
+import HeaderWrapper from "@/components/HeaderWrapper";
 // import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] });
@@ -83,7 +84,12 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <HeaderWrapper />
+        <main className="min-h-screen">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

@@ -1,4 +1,6 @@
 import { toolSections } from '@/data/toolSections';
+import ToolContent from '@/components/shared/ToolContent';
+import { Metadata } from 'next';
 import {
   // Unit Converters
   FeetToInches,
@@ -43,7 +45,35 @@ const MediaNetAd = () => {
   );
 };
 
-export default async function ToolPage({ params }: { params: Promise<{ tool: string }> }) {
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ tool: string }> 
+}): Promise<Metadata> {
+  const { tool } = await params;
+  const toolData = toolSections
+    .flatMap(section => section.tools)
+    .find(t => t.path === tool);
+
+  if (!toolData) {
+    return {
+      title: 'Tool Not Found',
+      description: 'The requested tool could not be found.'
+    };
+  }
+
+  return {
+    title: toolData.seo.title,
+    description: toolData.seo.description,
+    keywords: toolData.seo.keywords.join(', ')
+  };
+}
+
+export default async function ToolPage({ 
+  params 
+}: { 
+  params: Promise<{ tool: string }> 
+}) {
   const { tool } = await params;
   const toolPath = tool;
 
@@ -116,8 +146,40 @@ export default async function ToolPage({ params }: { params: Promise<{ tool: str
 
   return (
     <div className="space-y-6 h-full flex flex-col">
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between mb-0">
-        <h1 className="text-3xl font-bold">{toolData.name}</h1>
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex flex-col">
+        <h1 className="text-3xl font-bold mb-4">{toolData.name}</h1>
+        {toolData.content && toolData.content.length > 0 ? (
+          <ToolContent content={toolData.content} />
+        ) : (
+          <ToolContent
+            content={[
+              {
+                type: 'heading',
+                text: `About ${toolData.name}`
+              },
+              {
+                type: 'paragraph',
+                text: toolData.seo.description
+              },
+              {
+                type: 'heading',
+                text: 'How to Use This Tool'
+              },
+              {
+                type: 'paragraph',
+                text: 'This tool is designed to be simple and intuitive. Follow the on-screen instructions to get started. If you have any questions or need assistance, please refer to the tool\'s interface for guidance.'
+              },
+              {
+                type: 'heading',
+                text: 'Features'
+              },
+              {
+                type: 'paragraph',
+                text: '• Easy-to-use interface\n• Instant results\n• Accurate calculations\n• Responsive design\n• Dark mode support'
+              }
+            ]}
+          />
+        )}
       </div>
 
       {renderToolComponent()}
