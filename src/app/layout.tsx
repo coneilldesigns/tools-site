@@ -69,10 +69,36 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Resource hints */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://fundingchoicesmessages.google.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://fundingchoicesmessages.google.com" />
+        
+        {/* Meta tags */}
         <meta name="google-adsense-account" content="ca-pub-7722207431324039" />
+        <meta name="theme-color" content="#111827" />
+        
+        {/* Service Worker Registration */}
+        <Script id="register-sw" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                  console.log('ServiceWorker registration successful');
+                }, function(err) {
+                  console.log('ServiceWorker registration failed: ', err);
+                });
+              });
+            }
+          `}
+        </Script>
+
+        {/* Google Analytics - Load with lowest priority */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-9RQM1SLE8W"
           strategy="lazyOnload"
@@ -82,9 +108,16 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-9RQM1SLE8W');
+            gtag('config', 'G-9RQM1SLE8W', {
+              'send_page_view': false
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+              gtag('event', 'page_view');
+            });
           `}
         </Script>
+
+        {/* Google Ads - Load with lowest priority */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7722207431324039"
