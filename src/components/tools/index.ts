@@ -25,6 +25,4 @@ export { default as UnixTimestampConverter } from './time-date/UnixTimestampConv
 export { default as WordCounter } from './text-writing/WordCounter';
 export { default as TextCaseConverter } from './text-writing/TextCaseConverter';
 export { default as TextCleaner } from './text-writing/TextCleaner';
-export { default as LoremIpsumGenerator } from './text-writing/LoremIpsumGenerator';
-export { default as TextToEmoji } from './text-writing/TextToEmoji';
-export { default as FancyTextGenerator } from './text-writing/FancyTextGenerator'; 
+export { default as LoremIpsumGenerator } from './text-writing/LoremIpsumGenerator'; 

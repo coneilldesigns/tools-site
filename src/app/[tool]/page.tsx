@@ -20,9 +20,7 @@ import {
   WordCounter,
   TextCaseConverter,
   TextCleaner,
-  LoremIpsumGenerator,
-  TextToEmoji,
-  FancyTextGenerator
+  LoremIpsumGenerator
 } from '@/components/tools';
 import Script from 'next/script';
 
@@ -129,10 +127,6 @@ export default async function ToolPage({
         return <TextCleaner />;
       case 'lorem-ipsum-generator':
         return <LoremIpsumGenerator />;
-      case 'text-to-emoji':
-        return <TextToEmoji />;
-      case 'fancy-text-generator':
-        return <FancyTextGenerator />;
       default:
         return (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
@@ -146,8 +140,8 @@ export default async function ToolPage({
 
   return (
     <div className="space-y-6 h-full flex flex-col">
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex flex-col">
-        <h1 className="text-3xl font-bold mb-4">{toolData.name}</h1>
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex flex-col m-0">
+        <h1 className="text-3xl font-bold mb-2">{toolData.name}</h1>
         {toolData.content && toolData.content.length > 0 ? (
           <ToolContent content={toolData.content} />
         ) : (
@@ -184,7 +178,7 @@ export default async function ToolPage({
 
       {renderToolComponent()}
 
-      <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+      <div className="hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
         <MediaNetAd />
       </div>
     </div>

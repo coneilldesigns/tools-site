@@ -21,7 +21,7 @@ export default function ToolLayoutClient({
       <Header onMenuClick={toggleSidebar} />
 
       {/* Main Content Area with Sidebar */}
-      <div className="flex flex-1 pt-16 pb-15 relative">
+      <div className="flex flex-1 pt-16 md:pb-15 relative">
         <Sidebar 
           isOpen={isSidebarOpen} 
           onClose={() => setIsSidebarOpen(false)} 

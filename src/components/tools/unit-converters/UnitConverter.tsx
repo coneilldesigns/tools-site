@@ -107,7 +107,7 @@ export default function UnitConverter({
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="relative">
+            <div className="relative h-full">
               <NumericFormat
                 value={fromValue}
                 onValueChange={({ floatValue }) => {
@@ -120,7 +120,7 @@ export default function UnitConverter({
                   }
                 }}
                 placeholder="0"
-                className="w-full font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden"
+                className="w-full h-full font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden"
                 style={{ fontSize: textSize }}
                 decimalScale={8}
                 allowNegative={allowNegative}
@@ -128,7 +128,7 @@ export default function UnitConverter({
                 valueIsNumericString={false}
               />
               <motion.div 
-                className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
+                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -146,7 +146,7 @@ export default function UnitConverter({
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="relative">
+            <div className="relative h-full">
               <NumericFormat
                 value={toValue}
                 onValueChange={({ floatValue }) => {
@@ -159,7 +159,7 @@ export default function UnitConverter({
                   }
                 }}
                 placeholder="0"
-                className="w-full font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden"
+                className="w-full  h-full font-bold text-center bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-600 overflow-hidden"
                 style={{ fontSize: textSize }}
                 decimalScale={8}
                 allowNegative={allowNegative}
@@ -167,7 +167,7 @@ export default function UnitConverter({
                 valueIsNumericString={false}
               />
               <motion.div 
-                className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
+                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-sm md:text-base font-medium text-gray-400"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}

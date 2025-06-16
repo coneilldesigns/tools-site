@@ -411,28 +411,6 @@ export const toolSections: ToolSection[] = [
           keywords: ["lorem ipsum generator", "dummy text generator", "placeholder text", "lorem ipsum tool", "text generator"]
         },
         content: []
-      },
-      { 
-        name: "Text to emoji translator", 
-        path: "text-to-emoji",
-        enabled: true,
-        seo: {
-          title: "Text to Emoji Translator | Free Online Emoji Conversion Tool",
-          description: "Convert text to emojis with our free online translator. Add fun and expression to your messages with emoji conversion.",
-          keywords: ["text to emoji", "emoji translator", "text emoji converter", "emoji converter", "text to emoji tool"]
-        },
-        content: []
-      },
-      { 
-        name: "Fancy text generator", 
-        path: "fancy-text-generator",
-        enabled: true,
-        seo: {
-          title: "Fancy Text Generator | Free Online Stylish Text Creator",
-          description: "Create stylish and decorative text with our free online fancy text generator. Perfect for social media, usernames, and creative writing.",
-          keywords: ["fancy text generator", "stylish text", "decorative text", "text styler", "fancy font generator"]
-        },
-        content: []
       }
     ]
   },

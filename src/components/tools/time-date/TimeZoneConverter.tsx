@@ -1,13 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { formatInTimeZone } from 'date-fns-tz';
-import '@formatjs/intl-datetimeformat';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { TimezoneBoundaries } from './TimezoneBoundaries';
 
 // Fix for default marker icons in Leaflet with Next.js
 const DefaultIcon = L.icon({
@@ -47,19 +45,18 @@ function MapUpdater({ center }: { center: [number, number] }) {
 
 export default function TimeZoneConverter() {
   const [isClient, setIsClient] = useState(false);
-  const [currentTime, setCurrentTime] = useState<Date | null>(null);
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [userLocation, setUserLocation] = useState<Location | null>(null);
   const [comparisonLocation, setComparisonLocation] = useState<Location | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [locationError, setLocationError] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Helper function to set default location
-  const setDefaultLocation = useCallback(() => {
+  // Set default location based on browser timezone
+  const setDefaultLocation = () => {
     const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
     setUserLocation({
       id: 'user',
@@ -68,86 +65,13 @@ export default function TimeZoneConverter() {
       label: 'Default Location',
       displayName: `Default Location (${defaultTimeZone})`
     });
-  }, []); // Empty dependency array since we're only using setUserLocation which is stable
+  };
 
-  // Move getUserLocation into useCallback
-  const getUserLocation = useCallback(async () => {
-    try {
-      // First check if geolocation is supported
-      if (!navigator.geolocation) {
-        setLocationError('Geolocation is not supported by your browser. Please search for your location manually or ');
-        setDefaultLocation();
-        return;
-      }
-
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          resolve,
-          (error) => {
-            // Handle specific geolocation errors
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                setLocationError('Location access denied. You can enable location access in your browser settings or ');
-                setDefaultLocation();
-                reject(new Error('Location permission denied'));
-                break;
-              case error.POSITION_UNAVAILABLE:
-                setLocationError('Location information unavailable. Please check your device settings or ');
-                setDefaultLocation();
-                reject(new Error('Location information unavailable'));
-                break;
-              case error.TIMEOUT:
-                setLocationError('Location request timed out. Please check your internet connection or ');
-                setDefaultLocation();
-                reject(new Error('Location request timed out'));
-                break;
-              default:
-                setLocationError('Unable to get your location. Please check your device settings or ');
-                setDefaultLocation();
-                reject(new Error('Unknown location error'));
-            }
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
-          }
-        );
-      });
-
-      const { latitude, longitude } = position.coords;
-
-      // Get location details from coordinates
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
-      );
-      const data = await response.json();
-      const timeZone = data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-
-      setUserLocation({
-        id: 'user',
-        coordinates: [latitude, longitude],
-        timeZone,
-        label: data.display_name.split(',')[0],
-        displayName: data.display_name
-      });
-      setLocationError(null);
-    } catch (error) {
-      console.error('Error getting location:', error);
-      setDefaultLocation();
-    }
-  }, [setDefaultLocation]); // Include setDefaultLocation in dependencies
-
-  useEffect(() => {
-    if (isClient) {
-      getUserLocation();
-    }
-  }, [isClient, getUserLocation]);
-
-  // Set isClient to true on mount
+  // Initialize component
   useEffect(() => {
     setIsClient(true);
     setCurrentTime(new Date());
+    setDefaultLocation();
   }, []);
 
   // Update current time every second
@@ -184,9 +108,11 @@ export default function TimeZoneConverter() {
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`
         );
         const data = await response.json();
+        console.log('Location search API response:', data);
         setSuggestions(data);
       } catch (error) {
         console.error('Error fetching suggestions:', error);
+        setSearchError('Failed to fetch location suggestions. Please try again.');
       } finally {
         setIsSearching(false);
       }
@@ -200,37 +126,30 @@ export default function TimeZoneConverter() {
     try {
       const coordinates: [number, number] = [parseFloat(suggestion.lat), parseFloat(suggestion.lon)];
 
-      // Get timezone from coordinates
-      const timezoneResponse = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.lat}&lon=${suggestion.lon}&zoom=10`
-      );
-      const timezoneData = await timezoneResponse.json();
-      
-      // Calculate timezone based on coordinates
-      const lat = parseFloat(suggestion.lat);
-      const lon = parseFloat(suggestion.lon);
-      
-      // Map coordinates to IANA timezone names
-      let timeZone = timezoneData.timezone;
-      
-      if (!timeZone) {
-        // Simple mapping of coordinates to timezone names
-        if (lat >= 0) { // Northern Hemisphere
-          if (lon >= -180 && lon < -120) timeZone = 'America/Anchorage';
-          else if (lon >= -120 && lon < -60) timeZone = 'America/New_York';
-          else if (lon >= -60 && lon < 0) timeZone = 'Europe/London';
-          else if (lon >= 0 && lon < 60) timeZone = 'Europe/London';
-          else if (lon >= 60 && lon < 120) timeZone = 'Asia/Shanghai';
-          else timeZone = 'Asia/Tokyo';
-        } else { // Southern Hemisphere
-          if (lon >= -180 && lon < -120) timeZone = 'Pacific/Auckland';
-          else if (lon >= -120 && lon < -60) timeZone = 'America/Santiago';
-          else if (lon >= -60 && lon < 0) timeZone = 'America/Sao_Paulo';
-          else if (lon >= 0 && lon < 60) timeZone = 'Africa/Johannesburg';
-          else if (lon >= 60 && lon < 120) timeZone = 'Asia/Singapore';
-          else timeZone = 'Australia/Sydney';
+      // Get timezone based on coordinates
+      // For now, we'll use a simple mapping of coordinates to timezones
+      // This is a simplified version - in production you'd want a more comprehensive solution
+      const getTimezoneFromCoordinates = (lat: number, lon: number): string => {
+        // North America
+        if (lat > 24 && lat < 50 && lon > -125 && lon < -60) {
+          if (lon < -100) return 'America/Chicago';
+          if (lon < -85) return 'America/New_York';
+          return 'America/Toronto';
         }
-      }
+        // Europe
+        if (lat > 35 && lat < 60 && lon > -10 && lon < 40) {
+          return 'Europe/London';
+        }
+        // Asia
+        if (lat > 20 && lat < 50 && lon > 70 && lon < 140) {
+          return 'Asia/Tokyo';
+        }
+        // Default to UTC if we can't determine
+        return 'UTC';
+      };
+
+      const timeZone = getTimezoneFromCoordinates(coordinates[0], coordinates[1]);
+      console.log('Detected timezone:', timeZone);
 
       const newLocation: Location = {
         id: userLocation ? 'comparison' : 'user',
@@ -254,7 +173,7 @@ export default function TimeZoneConverter() {
   };
 
   // Don't render anything until we're on the client
-  if (!isClient || !currentTime) {
+  if (!isClient) {
     return (
       <div className="flex items-center justify-center w-full h-full">
         <div className="animate-pulse bg-gray-800 rounded-lg p-4">
@@ -272,32 +191,6 @@ export default function TimeZoneConverter() {
         className="w-full h-full"
       >
         <div className="relative w-full h-full bg-gray-900 overflow-hidden">
-          {/* Location Error Message */}
-          {locationError && (
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[1000] bg-red-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg text-sm max-w-md">
-              <div className="flex items-start gap-2">
-                <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                <div>
-                  {locationError}
-                  <button
-                    onClick={() => {
-                      setLocationError(null);
-                      getUserLocation();
-                    }}
-                    className="text-white underline hover:text-gray-200 ml-1"
-                  >
-                    try again
-                  </button>
-                  <div className="text-xs mt-1 text-gray-200">
-                    You can also search for your location using the search box below.
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Map */}
           <MapContainer
             center={[0, 0]}
@@ -318,12 +211,6 @@ export default function TimeZoneConverter() {
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            />
-            
-            {/* Timezone Boundaries */}
-            <TimezoneBoundaries 
-              timezoneData={[]} 
-              selectedTimezone={userLocation?.timeZone || null} 
             />
             
             {/* User Location Marker */}
@@ -438,25 +325,18 @@ export default function TimeZoneConverter() {
                 <h3 className="font-bold mb-2">My Location</h3>
                 <p className="text-sm text-gray-400">{userLocation.displayName}</p>
                 <p className="text-sm text-gray-400">Lat: {userLocation.coordinates[0].toFixed(4)}, Long: {userLocation.coordinates[1].toFixed(4)}</p>
-                {(() => {
-                  const now = new Date();
-                  return (
-                    <>
-                      <p className="text-lg mt-2">
-                        {formatInTimeZone(now, userLocation.timeZone, 'h:mm:ss a')}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        {formatInTimeZone(now, userLocation.timeZone, 'EEEE, MMMM d, yyyy')}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        {formatInTimeZone(now, userLocation.timeZone, 'z')}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        {formatInTimeZone(now, userLocation.timeZone, 'XXX')}
-                      </p>
-                    </>
-                  );
-                })()}
+                <p className="text-lg mt-2">
+                  {formatInTimeZone(currentTime, userLocation.timeZone, 'h:mm:ss a')}
+                </p>
+                <p className="text-sm text-gray-400">
+                  {formatInTimeZone(currentTime, userLocation.timeZone, 'EEEE, MMMM d, yyyy')}
+                </p>
+                <p className="text-sm text-gray-400">
+                  {formatInTimeZone(currentTime, userLocation.timeZone, 'z')}
+                </p>
+                <p className="text-sm text-gray-400">
+                  {formatInTimeZone(currentTime, userLocation.timeZone, 'XXX')}
+                </p>
               </motion.div>
             )}
 
@@ -488,43 +368,26 @@ export default function TimeZoneConverter() {
                 <h3 className="font-bold mb-2">{comparisonLocation.label}</h3>
                 <p className="text-sm text-gray-400">{comparisonLocation.displayName}</p>
                 <p className="text-sm text-gray-400">Lat: {comparisonLocation.coordinates[0].toFixed(4)}, Long: {comparisonLocation.coordinates[1].toFixed(4)}</p>
-                {(() => {
-                  const now = new Date();
-                  console.log('comparisonLocation', comparisonLocation)
-                  console.log('Comparison Location Time Debug:', {
-                    timeZone: comparisonLocation.timeZone,
-                    localTime: now.toISOString(),
-                    localTimeString: now.toString(),
-                    localTimeLocale: now.toLocaleString(),
-                    formattedTime: formatInTimeZone(now, comparisonLocation.timeZone, 'h:mm:ss a'),
-                    formattedTimeWithOffset: formatInTimeZone(now, comparisonLocation.timeZone, 'yyyy-MM-dd HH:mm:ss XXX'),
-                    formattedTimeWithZone: formatInTimeZone(now, comparisonLocation.timeZone, 'yyyy-MM-dd HH:mm:ss zzz')
-                  });
-                  return (
-                    <>
-                      <p className="text-lg mt-2">
-                        {formatInTimeZone(now, comparisonLocation.timeZone, 'h:mm:ss a')}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        {formatInTimeZone(now, comparisonLocation.timeZone, 'EEEE, MMMM d, yyyy')}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        {formatInTimeZone(now, comparisonLocation.timeZone, 'z')}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        {formatInTimeZone(now, comparisonLocation.timeZone, 'XXX')}
-                      </p>
-                      {userLocation && (
-                        <p className="text-sm text-gray-400 mt-1">
-                          {Math.round(
-                            (new Date(formatInTimeZone(now, comparisonLocation.timeZone, 'yyyy-MM-dd HH:mm:ss')).getTime() - 
-                             new Date(formatInTimeZone(now, userLocation.timeZone, 'yyyy-MM-dd HH:mm:ss')).getTime()) / (1000 * 60 * 60)
-                          )} hours from your time
-                        </p>
-                      )}
-                    </>
-                  );
-                })()}
+                <p className="text-lg mt-2">
+                  {formatInTimeZone(currentTime, comparisonLocation.timeZone, 'h:mm:ss a')}
+                </p>
+                <p className="text-sm text-gray-400">
+                  {formatInTimeZone(currentTime, comparisonLocation.timeZone, 'EEEE, MMMM d, yyyy')}
+                </p>
+                <p className="text-sm text-gray-400">
+                  {formatInTimeZone(currentTime, comparisonLocation.timeZone, 'z')}
+                </p>
+                <p className="text-sm text-gray-400">
+                  {formatInTimeZone(currentTime, comparisonLocation.timeZone, 'XXX')}
+                </p>
+                {userLocation && (
+                  <p className="text-sm text-gray-400 mt-1">
+                    {Math.round(
+                      (new Date(formatInTimeZone(currentTime, comparisonLocation.timeZone, 'yyyy-MM-dd HH:mm:ss')).getTime() - 
+                       new Date(formatInTimeZone(currentTime, userLocation.timeZone, 'yyyy-MM-dd HH:mm:ss')).getTime()) / (1000 * 60 * 60)
+                    )} hours from your time
+                  </p>
+                )}
               </motion.div>
             )}
           </div>

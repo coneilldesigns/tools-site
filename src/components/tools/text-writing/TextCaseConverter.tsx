@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function TextCaseConverter() {
   const [text, setText] = useState('');
+  const [copiedType, setCopiedType] = useState<string | null>(null);
 
   const convertCase = (type: string) => {
     switch (type) {
@@ -27,13 +28,23 @@ export default function TextCaseConverter() {
           .split('')
           .map((char, index) => index % 2 === 0 ? char.toLowerCase() : char.toUpperCase())
           .join('');
+      case 'camel':
+        return text
+          .toLowerCase()
+          .split(' ')
+          .map((word, index) => 
+            index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+          )
+          .join('');
       default:
         return text;
     }
   };
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
+    setCopiedType(type);
+    setTimeout(() => setCopiedType(null), 2000);
   };
 
   return (
@@ -52,7 +63,7 @@ export default function TextCaseConverter() {
 
       {/* Converted Text Display Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full flex-1">
-        {['upper', 'lower', 'title', 'sentence', 'alternating'].map((type) => (
+        {['upper', 'lower', 'title', 'sentence', 'alternating', 'camel'].map((type) => (
           <div 
             key={type} 
             className="relative h-full flex flex-col border-r border-b md:border-b-0 border-gray-800"
@@ -64,13 +75,13 @@ export default function TextCaseConverter() {
             >
               <div className="flex justify-between items-center px-6 py-4 border-b border-gray-800">
                 <div className="text-gray-300 text-base md:text-xl lg:text-2xl capitalize">
-                  {type} Case
+                  {type === 'camel' ? 'Camel Case' : `${type} Case`}
                 </div>
                 <button
-                  onClick={() => copyToClipboard(convertCase(type))}
+                  onClick={() => copyToClipboard(convertCase(type), type)}
                   className="text-emerald-500 hover:text-emerald-400 text-sm md:text-base font-medium"
                 >
-                  Copy
+                  {copiedType === type ? 'Copied!' : 'Copy'}
                 </button>
               </div>
               <div className="flex-1 p-6 text-white text-lg md:text-xl overflow-auto">

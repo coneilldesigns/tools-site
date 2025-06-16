@@ -13,7 +13,7 @@ export default function ToolContent({ content }: ToolContentProps) {
   return (
     <details className="text-gray-300">
       <summary className="cursor-pointer hover:text-white transition-colors">
-        <span className="text-lg font-medium">About this tool</span>
+        <span className="text-sm md:text-lg font-medium">About this tool</span>
       </summary>
       <motion.div
         initial={{ opacity: 0, y: -10 }}

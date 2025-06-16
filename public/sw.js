@@ -16,6 +16,15 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Skip non-GET requests, chrome-extension URLs, and non-HTTP(S) URLs
+  if (
+    event.request.method !== 'GET' || 
+    event.request.url.startsWith('chrome-extension://') ||
+    !event.request.url.startsWith('http')
+  ) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       // Cache hit - return response
@@ -32,9 +41,14 @@ self.addEventListener('fetch', (event) => {
         // Clone the response
         const responseToCache = response.clone();
 
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
+        // Only cache GET requests
+        if (event.request.method === 'GET') {
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache).catch(() => {
+              // Ignore cache errors
+            });
+          });
+        }
 
         return response;
       });
