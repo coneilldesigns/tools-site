@@ -53,7 +53,7 @@ export default function Home() {
                       <Link
                         href={`/${tool.path}`} 
                         key={toolIndex}
-                        className={`block p-4 border-r border-b border-gray-700 hover:bg-gray-800 transition-colors duration-200 text-center aspect-square md:aspect-square lg:aspect-square [&:nth-child(1):nth-last-child(1)]:aspect-[2/1] [&:nth-child(1):nth-last-child(2)]:aspect-[2/1] [&:nth-child(2):nth-last-child(1)]:aspect-[2/1] ${
+                        className={`block p-4 border-r border-b border-gray-700 hover:bg-gray-800 transition-colors duration-200 text-center aspect-[2/1] md:aspect-[2/1] lg:aspect-[2/1] [&:nth-child(1):nth-last-child(1)]:aspect-[2/1] [&:nth-child(1):nth-last-child(2)]:aspect-[2/1] [&:nth-child(2):nth-last-child(1)]:aspect-[2/1] ${
                           toolIndex % 2 === 1 ? 'border-r-0' : ''
                         } lg:border-r ${
                           toolIndex % 4 === 3 ? 'lg:border-r-0' : ''
@@ -66,7 +66,7 @@ export default function Home() {
                             {tool.name}
                           </h3>
                           <p className="text-sm text-gray-400 flex items-center justify-center">
-                            Use tool
+                            Try this tool
                             <svg 
                               className="w-4 h-4 ml-1" 
                               fill="none" 

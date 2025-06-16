@@ -36,6 +36,7 @@ export default function CountdownTimer() {
     seconds: 0
   });
   const [showModal, setShowModal] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (targetDateTime) {
@@ -45,9 +46,16 @@ export default function CountdownTimer() {
         
         if (difference <= 0) {
           setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+          setProgress(100);
           clearInterval(interval);
           return;
         }
+
+        // Calculate progress percentage based on remaining time
+        const totalDuration = 10 * 24 * 60 * 60 * 1000; // 10 days in milliseconds
+        const remaining = difference;
+        const percentage = 100 - Math.min(100, Math.max(0, (remaining / totalDuration) * 100));
+        setProgress(percentage);
 
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -89,6 +97,21 @@ export default function CountdownTimer() {
               {formatDateTime(targetDateTime)}
             </div>
           </motion.div>
+        </div>
+      </div>
+
+      {/* Progress Bar Row */}
+      <div className="flex w-full border-b border-gray-800">
+        <div className="relative w-full h-full flex items-center justify-center">
+          <div className="w-full h-8 bg-gray-800 overflow-hidden">
+            <div 
+              className="h-full bg-emerald-500 transition-all duration-1000 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="absolute text-white text-sm font-medium">
+            {progress.toFixed(1)}%
+          </div>
         </div>
       </div>
 
@@ -159,6 +182,11 @@ export default function CountdownTimer() {
                   <StaticDateTimePicker
                     value={targetDateTime}
                     onChange={(newValue) => {
+                      if (newValue) {
+                        setTargetDateTime(newValue);
+                      }
+                    }}
+                    onAccept={(newValue) => {
                       if (newValue) {
                         setTargetDateTime(newValue);
                         setShowModal(false);

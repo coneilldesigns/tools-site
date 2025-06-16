@@ -122,6 +122,11 @@ export default function UnixTimestampConverter() {
                     onChange={(newValue) => {
                       if (newValue) {
                         handleDateChange(newValue);
+                      }
+                    }}
+                    onAccept={(newValue) => {
+                      if (newValue) {
+                        handleDateChange(newValue);
                         setShowModal(false);
                       }
                     }}

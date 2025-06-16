@@ -24,6 +24,7 @@
     "@types/react-datepicker": "^6.2.0",
     "@types/react-select": "^5.0.0",
     "@types/react-simple-maps": "^3.0.6",
+    "@vercel/speed-insights": "^1.2.0",
     "@vvo/tzdb": "^6.171.0",
     "d3-scale": "^4.0.2",
     "date-fns": "^4.1.0",

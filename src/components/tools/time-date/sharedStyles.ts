@@ -5,6 +5,7 @@ export const calendarStyles: SxProps<Theme> = {
   height: '100%',
   '& .MuiDateTimePickerToolbar-root': {
     borderBottom: '1px solid #364152',
+    padding: '0px',
   },
   '& .MuiPickersCalendarHeader-root': {
     borderBottom: '1px solid #364152',
@@ -16,6 +17,29 @@ export const calendarStyles: SxProps<Theme> = {
     height: '100%',
   },
   '& .MuiDateCalendar-root': {
+    width: '100%',
+    height: '100%',
+    maxHeight: '100%',
+  },
+  '& .MuiPickersToolbar-title': {
+    borderBottom: '1px solid #364152',
+    display: 'block',
+    width: '100%',
+    padding: '1rem',
+  },
+  '& .MuiDateTimePickerToolbar-dateContainer': {
+    borderRight: '1px solid #364152',
+    padding: '1rem',
+  },
+  '& .MuiDateTimePickerToolbar-timeContainer': {
+    borderRight: '1px solid #364152',
+    padding: '1rem',
+  },
+  '& .MuiDateTimePickerToolbar-ampmContainer': {
+    borderRight: '1px solid #364152',
+    padding: '1rem',
+  },
+  '& .MuiList-root': {
     width: '100%',
     height: '100%',
     maxHeight: '100%',
@@ -66,6 +90,7 @@ export const calendarStyles: SxProps<Theme> = {
   },
   '& .MuiPickersFadeTransitionGroup-root > div': {
     height: '100%',
+    width: '100%',
   },
   '& .MuiDayCalendar-root .MuiButtonBase-root, & .MuiPickersDay-hiddenDaySpacingFiller': {
     borderRadius: '0px',
@@ -76,16 +101,27 @@ export const calendarStyles: SxProps<Theme> = {
     margin: '0px',
     padding: '0px',
     width: 'calc(100% / 7)',
-    backgroundColor: '#151c26',
+    // backgroundColor: '#151c26',
+  },
+  // '& .MuiYearCalendar-root': {
+  //   width: '100%',
+  //   height: '100%',
+  //   maxHeight: '100%',
+  //   gap: '0px',
+  //   margin: '0px',
+  //   padding: '0px',
+  //   overflowY: 'visible',
+  //   display: 'block',
+  // },
+  // '& .MuiYearCalendar-root .MuiYearCalendar-button': {
+  //   width: 'calc(100% / 3)',
+  // },
+  '& .MuiDayCalendar-root .MuiButtonBase-root.Mui-disabled': {
+    backgroundColor: '#141c26',
   },
   '& .MuiDayCalendar-root .MuiButtonBase-root.Mui-selected': {
     borderRadius: '0px',
     color: '#FFF',
-    backgroundColor: '#1F2937',
-  },
-  '& .MuiDayCalendar-root .MuiButtonBase-root:hover': {
-    color: '#FFF',
-    backgroundColor: '#1F2937',
   },
   '& .MuiDayCalendar-root .MuiButtonBase-root.MuiPickersDay-today': {
     backgroundColor: '#FFF',

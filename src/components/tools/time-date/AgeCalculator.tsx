@@ -91,7 +91,7 @@ export default function AgeCalculator() {
 
       {/* Age Display Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 w-full flex-1">
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -101,7 +101,7 @@ export default function AgeCalculator() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{age.years}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -111,7 +111,7 @@ export default function AgeCalculator() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{age.months}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r md:border-r-0 border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -121,7 +121,7 @@ export default function AgeCalculator() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{age.days}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -131,7 +131,7 @@ export default function AgeCalculator() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{age.hours}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -141,7 +141,7 @@ export default function AgeCalculator() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{age.minutes}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center">
+        <div className="relative h-full flex flex-col items-center justify-center border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -176,6 +176,11 @@ export default function AgeCalculator() {
                   <StaticDateTimePicker
                     value={birthDate}
                     onChange={(newValue) => {
+                      if (newValue) {
+                        setBirthDate(newValue);
+                      }
+                    }}
+                    onAccept={(newValue) => {
                       if (newValue) {
                         setBirthDate(newValue);
                         setShowModal(false);

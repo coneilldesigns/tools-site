@@ -86,7 +86,7 @@ export default function DaysBetweenDates() {
     <div className="flex flex-col w-full h-full m-0">
       {/* Date and Time Display Row */}
       <div className="flex w-full flex-1 border-b border-gray-800">
-        <div className="relative w-1/2 h-full flex items-center justify-center border-r border-gray-800">
+        <div className="relative w-1/2 h-full flex items-center justify-center text-center p-4 border-r border-gray-800">
           <motion.div 
             className="w-full h-full flex items-center justify-center cursor-pointer"
             whileHover={{ scale: 1.02 }}
@@ -98,7 +98,7 @@ export default function DaysBetweenDates() {
             </div>
           </motion.div>
         </div>
-        <div className="relative w-1/2 h-full flex items-center justify-center">
+        <div className="relative w-1/2 h-full flex items-center justify-center text-center p-4">
           <motion.div 
             className="w-full h-full flex items-center justify-center cursor-pointer"
             whileHover={{ scale: 1.02 }}
@@ -114,7 +114,7 @@ export default function DaysBetweenDates() {
 
       {/* Difference Display Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 w-full flex-1">
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -124,7 +124,7 @@ export default function DaysBetweenDates() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{difference.years}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -134,7 +134,7 @@ export default function DaysBetweenDates() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{difference.months}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-b md:border-b-0 border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800 md:border-r-0">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -144,7 +144,7 @@ export default function DaysBetweenDates() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{difference.days}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -154,7 +154,7 @@ export default function DaysBetweenDates() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{difference.hours}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center border-r border-gray-800">
+        <div className="relative h-full flex flex-col items-center justify-center border-r border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -164,7 +164,7 @@ export default function DaysBetweenDates() {
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{difference.minutes}</div>
           </motion.div>
         </div>
-        <div className="relative h-full flex flex-col items-center justify-center">
+        <div className="relative h-full flex flex-col items-center justify-center border-b border-gray-800">
           <motion.div 
             className="w-full h-full flex flex-col items-center justify-center"
             whileHover={{ scale: 1.02 }}
@@ -199,6 +199,11 @@ export default function DaysBetweenDates() {
                   <StaticDateTimePicker
                     value={startDate}
                     onChange={(newValue) => {
+                      if (newValue) {
+                        setStartDate(newValue);
+                      }
+                    }}
+                    onAccept={(newValue) => {
                       if (newValue) {
                         setStartDate(newValue);
                         setShowStartModal(false);
@@ -237,6 +242,11 @@ export default function DaysBetweenDates() {
                   <StaticDateTimePicker
                     value={endDate}
                     onChange={(newValue) => {
+                      if (newValue) {
+                        setStartDate(newValue);
+                      }
+                    }}
+                    onAccept={(newValue) => {
                       if (newValue) {
                         setEndDate(newValue);
                         setShowEndModal(false);
