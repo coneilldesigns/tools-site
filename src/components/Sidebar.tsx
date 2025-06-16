@@ -37,11 +37,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <ul className="space-y-2">
             {enabledSections.map((section, index) => (
               <li key={index} className="mb-4">
-                <div className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 font-medium">
+                <div className="flex items-center px-0 py-2 text-gray-700 dark:text-gray-200 font-medium">
                   <span className="mr-2">{section.icon}</span>
                   {section.title}
                 </div>
-                <ul className="ml-6 mt-2 space-y-1">
+                <ul className="ml-4 mt-2 space-y-1">
                   {section.tools.map((tool, toolIndex) => {
                     const isActive = pathname === `/${tool.path}`;
                     return (
