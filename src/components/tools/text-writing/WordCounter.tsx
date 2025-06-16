@@ -56,7 +56,7 @@ export default function WordCounter() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Words</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Words</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.words}</div>
           </motion.div>
         </div>
@@ -66,7 +66,7 @@ export default function WordCounter() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Characters</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Characters</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.characters}</div>
           </motion.div>
         </div>
@@ -76,7 +76,7 @@ export default function WordCounter() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Sentences</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Sentences</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.sentences}</div>
           </motion.div>
         </div>
@@ -86,7 +86,7 @@ export default function WordCounter() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Paragraphs</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Paragraphs</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.paragraphs}</div>
           </motion.div>
         </div>
@@ -96,7 +96,7 @@ export default function WordCounter() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Reading Time</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Reading Time</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{stats.readingTime}m</div>
           </motion.div>
         </div>

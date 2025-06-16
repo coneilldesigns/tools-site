@@ -139,7 +139,7 @@ export default function CountdownTimer() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Days</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Days</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.days}</div>
           </motion.div>
         </div>
@@ -149,7 +149,7 @@ export default function CountdownTimer() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Hours</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Hours</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.hours}</div>
           </motion.div>
         </div>
@@ -159,7 +159,7 @@ export default function CountdownTimer() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Minutes</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Minutes</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.minutes}</div>
           </motion.div>
         </div>
@@ -169,7 +169,7 @@ export default function CountdownTimer() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Seconds</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Seconds</div>
             <div className="text-white text-3xl md:text-5xl lg:text-6xl font-bold">{timeLeft.seconds}</div>
           </motion.div>
         </div>

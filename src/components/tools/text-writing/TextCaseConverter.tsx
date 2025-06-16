@@ -63,7 +63,7 @@ export default function TextCaseConverter() {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <div className="flex justify-between items-center px-6 py-4 border-b border-gray-800">
-                <div className="text-gray-400 text-base md:text-xl lg:text-2xl capitalize">
+                <div className="text-gray-300 text-base md:text-xl lg:text-2xl capitalize">
                   {type} Case
                 </div>
                 <button

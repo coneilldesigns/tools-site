@@ -189,7 +189,7 @@ export default function WhatDayWasIt() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Moon Phase</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Moon Phase</div>
             <div className="text-white text-xl md:text-2xl lg:text-3xl font-bold">
               {isLoading ? '...' : dayInfo.moonPhase}
             </div>
@@ -202,7 +202,7 @@ export default function WhatDayWasIt() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Sun Times</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Sun Times</div>
             <div className="text-white text-xs md:text-sm lg:text-base">
               {isLoading ? '...' : (
                 <table className="mt-2">
@@ -238,7 +238,7 @@ export default function WhatDayWasIt() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-base md:text-xl lg:text-2xl">Holidays</div>
+            <div className="text-gray-300 text-base md:text-xl lg:text-2xl">Holidays</div>
             <div className="text-white text-sm md:text-base lg:text-lg font-bold">
               {isLoading ? '...' : (
                 dayInfo.holidays.length > 0 ? dayInfo.holidays.join(', ') : 'No holidays'
@@ -253,7 +253,7 @@ export default function WhatDayWasIt() {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <div className="text-gray-400 text-xs md:text-sm lg:text-base mb-1">Historical Events</div>
+            <div className="text-gray-300 text-xs md:text-sm lg:text-base mb-1">Historical Events</div>
             <div className="text-white text-[10px] md:text-xs lg:text-sm max-w-[90%] leading-relaxed">
               {isLoading ? '...' : (
                 dayInfo.historicalEvents.length > 0 
