@@ -593,7 +593,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Color picker / converter", 
         path: "color-picker",
-        enabled: false,
+        enabled: true,
         seo: {
           title: "Color Picker | Free Online Color Selection and Conversion Tool",
           description: "Pick colors and convert between color formats with our free online color picker. Perfect for web design and digital art.",
@@ -637,7 +637,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "CSS box shadow generator", 
         path: "box-shadow-generator",
-        enabled: false,
+        enabled: true,
         seo: {
           title: "CSS Box Shadow Generator | Free Online Shadow Effect Tool",
           description: "Create CSS box shadows with our free online generator. Perfect for web design and UI development.",
