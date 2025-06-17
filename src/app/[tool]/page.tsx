@@ -20,7 +20,12 @@ import {
   WordCounter,
   TextCaseConverter,
   TextCleaner,
-  LoremIpsumGenerator
+  LoremIpsumGenerator,
+  // Math & Number Tools
+  TipCalculator,
+  BmiCalculator,
+  // Package & Shipping Tools
+  UniversalTracking,
 } from '@/components/tools';
 import Script from 'next/script';
 
@@ -127,6 +132,14 @@ export default async function ToolPage({
         return <TextCleaner />;
       case 'lorem-ipsum-generator':
         return <LoremIpsumGenerator />;
+      // Math & Number Tools
+      case 'tip-calculator':
+        return <TipCalculator />;
+      case 'bmi-calculator':
+        return <BmiCalculator />;
+      // Package & Shipping Tools
+      case 'universal-tracking':
+        return <UniversalTracking />;
       default:
         return (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">

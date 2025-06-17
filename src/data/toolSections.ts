@@ -421,7 +421,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "Tip calculator", 
         path: "tip-calculator",
-        enabled: false,
+        enabled: true,
         seo: {
           title: "Tip Calculator | Free Online Gratuity Calculator",
           description: "Calculate tips and split bills with our free online tip calculator. Quick and easy gratuity calculation for restaurants and services.",
@@ -476,7 +476,7 @@ export const toolSections: ToolSection[] = [
       { 
         name: "BMI calculator", 
         path: "bmi-calculator",
-        enabled: false,
+        enabled: true,
         seo: {
           title: "BMI Calculator | Free Online Body Mass Index Calculator",
           description: "Calculate your Body Mass Index (BMI) with our free online BMI calculator. Quick and accurate health assessment tool.",
@@ -492,6 +492,23 @@ export const toolSections: ToolSection[] = [
           title: "Prime Number Checker | Free Online Prime Number Tool",
           description: "Check if a number is prime with our free online prime number checker. Quick and accurate prime number verification.",
           keywords: ["prime number checker", "prime number calculator", "prime number tool", "prime number verifier", "prime number detector"]
+        },
+        content: []
+      }
+    ]
+  },
+  {
+    icon: "📦",
+    title: "Package & Shipping Tools",
+    tools: [
+      { 
+        name: "Universal Tracking", 
+        path: "universal-tracking",
+        enabled: false,
+        seo: {
+          title: "Universal Package Tracking | Track Any Shipping Number",
+          description: "Track packages from multiple carriers with our universal tracking tool. Enter any tracking number to get real-time shipping updates.",
+          keywords: ["package tracking", "shipping tracker", "universal tracking", "tracking number", "parcel tracking"]
         },
         content: []
       }

@@ -26,3 +26,10 @@ export { default as WordCounter } from './text-writing/WordCounter';
 export { default as TextCaseConverter } from './text-writing/TextCaseConverter';
 export { default as TextCleaner } from './text-writing/TextCleaner';
 export { default as LoremIpsumGenerator } from './text-writing/LoremIpsumGenerator'; 
+
+// Math & Number Tools
+export { default as TipCalculator } from './math-numbers/TipCalculator';
+export { default as BmiCalculator } from './math-numbers/BmiCalculator';  
+
+// Package & Shipping Tools
+export { default as UniversalTracking } from './package-shipping/UniversalTracking';

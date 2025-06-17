@@ -55,8 +55,8 @@ const initialDayInfo: DayInfo = {
 
 export default function WhatDayWasIt() {
   const [date, setDate] = useState<Date>(() => {
-    // Use a fixed date for initial state to avoid hydration mismatch
-    return new Date('2024-01-01');
+    // Use today's date for initial state
+    return new Date();
   });
   const [showModal, setShowModal] = useState(false);
   const [dayInfo, setDayInfo] = useState<DayInfo>(initialDayInfo);
@@ -290,6 +290,11 @@ export default function WhatDayWasIt() {
                   <StaticDatePicker
                     value={date}
                     onChange={(newValue) => {
+                      if (newValue) {
+                        setDate(newValue);
+                      }
+                    }}
+                    onAccept={(newValue) => {
                       if (newValue) {
                         setDate(newValue);
                         setShowModal(false);

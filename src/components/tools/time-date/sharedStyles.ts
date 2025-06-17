@@ -39,6 +39,15 @@ export const calendarStyles: SxProps<Theme> = {
     borderRight: '1px solid #364152',
     padding: '1rem',
   },
+  '& .MuiPickersToolbar-root': {
+    padding: '0px',
+    margin: '0px',
+  },
+  '& .MuiPickersToolbar-content': {
+    padding: '1rem',
+    margin: '0px',
+    borderBottom: '1px solid #364152',
+  },
   '& .MuiList-root': {
     width: '100%',
     height: '100%',
