@@ -165,6 +165,7 @@ export default function CountdownTimer() {
                         setTargetDateTime(newValue);
                       }
                     }}
+                    onClose={() => setShowModal(false)}
                     onAccept={(newValue) => {
                       if (newValue) {
                         setTargetDateTime(newValue);

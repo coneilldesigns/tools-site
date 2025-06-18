@@ -65,7 +65,7 @@ export default function Home() {
                           <h3 className="text-lg font-medium text-white mb-2">
                             {tool.name}
                           </h3>
-                          <p className="text-sm text-gray-400 flex items-center justify-center">
+                          <button className="text-sm bg-primary/20 hover:bg-primary/30 text-white px-4 py-2 rounded-md flex items-center justify-center transition-colors duration-200 mx-auto">
                             Try this tool
                             <svg 
                               className="w-4 h-4 ml-1" 
@@ -81,7 +81,7 @@ export default function Home() {
                                 d="M9 5l7 7-7 7" 
                               />
                             </svg>
-                          </p>
+                          </button>
                         </div>
                       </Link>
                     ))}

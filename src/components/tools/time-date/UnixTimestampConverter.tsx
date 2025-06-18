@@ -124,6 +124,7 @@ export default function UnixTimestampConverter() {
                         handleDateChange(newValue);
                       }
                     }}
+                    onClose={() => setShowModal(false)}
                     onAccept={(newValue) => {
                       if (newValue) {
                         handleDateChange(newValue);

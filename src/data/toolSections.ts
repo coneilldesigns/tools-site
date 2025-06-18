@@ -602,6 +602,17 @@ export const toolSections: ToolSection[] = [
         content: []
       },
       { 
+        name: "CSS box shadow generator", 
+        path: "box-shadow-generator",
+        enabled: true,
+        seo: {
+          title: "CSS Box Shadow Generator | Free Online Shadow Effect Tool",
+          description: "Create CSS box shadows with our free online generator. Perfect for web design and UI development.",
+          keywords: ["box shadow generator", "css shadow", "shadow effect", "web design tool", "ui shadow"]
+        },
+        content: []
+      },
+      { 
         name: "Image resizer / compressor", 
         path: "image-resizer",
         enabled: false,
@@ -631,17 +642,6 @@ export const toolSections: ToolSection[] = [
           title: "Favicon Generator | Free Online Website Icon Creation Tool",
           description: "Create website favicons with our free online favicon generator. Perfect for web development and site branding.",
           keywords: ["favicon generator", "website icon", "favicon creator", "site icon", "browser icon"]
-        },
-        content: []
-      },
-      { 
-        name: "CSS box shadow generator", 
-        path: "box-shadow-generator",
-        enabled: true,
-        seo: {
-          title: "CSS Box Shadow Generator | Free Online Shadow Effect Tool",
-          description: "Create CSS box shadows with our free online generator. Perfect for web design and UI development.",
-          keywords: ["box shadow generator", "css shadow", "shadow effect", "web design tool", "ui shadow"]
         },
         content: []
       },

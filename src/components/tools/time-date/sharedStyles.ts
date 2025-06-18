@@ -76,6 +76,11 @@ export const calendarStyles: SxProps<Theme> = {
   '& .MuiDateTimePickerToolbar-dateContainer, & .MuiDateTimePickerToolbar-timeContainer': {
     flex: 1
   },
+  '& .MuiYearCalendar-root': {
+    gap: '0px',
+    padding: '0px',
+    maxHeight: 'calc(100% - 36.5rem)',
+  },
   '& .MuiPickersSlideTransition-root': {
     width: '100%',
     height: '100%',
@@ -115,19 +120,6 @@ export const calendarStyles: SxProps<Theme> = {
   '& .MuiPickersDay-hiddenDaySpacingFiller': {
     backgroundColor: '#141C26',
   },
-  // '& .MuiYearCalendar-root': {
-  //   width: '100%',
-  //   height: '100%',
-  //   maxHeight: '100%',
-  //   gap: '0px',
-  //   margin: '0px',
-  //   padding: '0px',
-  //   overflowY: 'visible',
-  //   display: 'block',
-  // },
-  // '& .MuiYearCalendar-root .MuiYearCalendar-button': {
-  //   width: 'calc(100% / 3)',
-  // },
   '& .MuiDayCalendar-root .MuiButtonBase-root.Mui-disabled': {
     backgroundColor: '#141c26',
   },

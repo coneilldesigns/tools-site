@@ -203,6 +203,7 @@ export default function DaysBetweenDates() {
                         setStartDate(newValue);
                       }
                     }}
+                    onClose={() => setShowStartModal(false)}
                     onAccept={(newValue) => {
                       if (newValue) {
                         setStartDate(newValue);
@@ -246,6 +247,7 @@ export default function DaysBetweenDates() {
                         setStartDate(newValue);
                       }
                     }}
+                    onClose={() => setShowEndModal(false)}
                     onAccept={(newValue) => {
                       if (newValue) {
                         setEndDate(newValue);

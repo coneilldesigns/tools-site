@@ -24,7 +24,7 @@ const darkTheme = createTheme({
 });
 
 export default function AgeCalculator() {
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [birthDate, setBirthDate] = useState<Date | null>(new Date());
   const [showModal, setShowModal] = useState(false);
   const [age, setAge] = useState({
     years: 0,
@@ -77,7 +77,7 @@ export default function AgeCalculator() {
       <div className="flex w-full flex-1 border-b border-gray-800">
         <div className="relative w-full h-full flex items-center justify-center">
           <motion.div 
-            className="w-full h-full flex items-center justify-center cursor-pointer"
+            className="w-full h-full flex items-center justify-center cursor-pointer text-center p-6"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
             onClick={() => setShowModal(true)}
@@ -180,6 +180,7 @@ export default function AgeCalculator() {
                         setBirthDate(newValue);
                       }
                     }}
+                    onClose={() => setShowModal(false)}
                     onAccept={(newValue) => {
                       if (newValue) {
                         setBirthDate(newValue);

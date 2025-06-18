@@ -33,3 +33,13 @@ export { default as BmiCalculator } from './math-numbers/BmiCalculator';
 
 // Package & Shipping Tools
 export { default as UniversalTracking } from './package-shipping/UniversalTracking';
+
+// Design & Web Tools
+export { default as ColorPicker } from './design-web/ColorPicker';
+export { default as BoxShadowGenerator } from './design-web/BoxShadowGenerator';
+export { default as ImageResizer } from './design-web/ImageResizer';
+export { default as FontPairingTool } from './design-web/FontPairingTool';
+export { default as FaviconGenerator } from './design-web/FaviconGenerator';
+export { default as QRCodeGenerator } from './design-web/QRCodeGenerator';
+export { default as ImageCompressor } from './design-web/ImageCompressor';
+export { default as ImageConverter } from './design-web/ImageConverter';
