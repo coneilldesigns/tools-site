@@ -43,3 +43,4 @@ export { default as FaviconGenerator } from './design-web/FaviconGenerator';
 export { default as QRCodeGenerator } from './design-web/QRCodeGenerator';
 export { default as ImageCompressor } from './design-web/ImageCompressor';
 export { default as ImageConverter } from './design-web/ImageConverter';
+export { default as RegexTester } from './design-web/RegexTester';

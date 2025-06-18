@@ -599,7 +599,32 @@ export const toolSections: ToolSection[] = [
           description: "Pick colors and convert between color formats with our free online color picker. Perfect for web design and digital art.",
           keywords: ["color picker", "color converter", "color tool", "color selector", "color palette"]
         },
-        content: []
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a Color Picker & Converter?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A color picker and converter is a tool that allows you to select colors visually and convert between different color formats such as HEX, RGB, HSL, and CMYK. It is essential for designers, developers, and digital artists who need precise color values for their projects.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Color Picker'
+          },
+          {
+            type: 'paragraph',
+            text: 'Simply pick a color using the visual color picker or enter a value in your preferred format. The tool will instantly display the color in multiple formats, making it easy to copy and use in your designs or code.'
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Visual color selection\n• Convert between HEX, RGB, HSL, and CMYK\n• Copy color values with one click\n• Real-time color preview\n• User-friendly interface'
+          }
+        ]
       },
       { 
         name: "CSS box shadow generator", 
@@ -610,7 +635,68 @@ export const toolSections: ToolSection[] = [
           description: "Create CSS box shadows with our free online generator. Perfect for web design and UI development.",
           keywords: ["box shadow generator", "css shadow", "shadow effect", "web design tool", "ui shadow"]
         },
-        content: []
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a CSS Box Shadow Generator?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A CSS box shadow generator is a tool that helps you create and customize box-shadow effects for your web elements. It provides a visual interface to adjust shadow parameters and instantly see the results, making it easy to design modern UI effects.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Box Shadow Generator'
+          },
+          {
+            type: 'paragraph',
+            text: "Adjust the shadow's offset, blur, spread, color, and inset options using the sliders or input fields. The tool will generate the corresponding CSS code, which you can copy and use directly in your stylesheets."
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Real-time box shadow preview\n• Adjustable offset, blur, spread, and color\n• Inset shadow option\n• Copy-ready CSS code\n• Intuitive and responsive design'
+          }
+        ]
+      },
+      { 
+        name: "Regex Tester", 
+        path: "regex-tester",
+        enabled: true,
+        seo: {
+          title: "Regex Tester | Free Online Regular Expression Tester",
+          description: "Test and validate regular expressions with our free online regex tester. Perfect for web development and data validation.",
+          keywords: ["regex tester", "regex validator", "regex tool", "regex checker", "regex matcher"]
+        },
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a Regex Tester?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A regex tester is a tool that allows you to test and validate regular expressions. It is essential for web development and data validation.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Regex Tester'
+          },
+          {
+            type: 'paragraph',
+            text: 'Simply enter your regular expression and test string in the input fields. The tool will instantly show you the results, including whether the expression matches or not.'
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Real-time regex testing\n• Test multiple expressions at once\n• Syntax highlighting\n• Copy-ready results\n• User-friendly interface'
+          }
+        ]
       },
       { 
         name: "Image resizer / compressor", 

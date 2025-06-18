@@ -29,6 +29,7 @@ import {
   // Design & Web Tools
   ColorPicker,
   BoxShadowGenerator,
+  RegexTester,
   ImageResizer,
   FontPairingTool,
   FaviconGenerator,
@@ -166,6 +167,8 @@ export default async function ToolPage({
         return <ImageCompressor />;
       case 'image-converter':
         return <ImageConverter />;
+      case 'regex-tester':
+        return <RegexTester />;
       default:
         return (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
