@@ -39,3 +39,7 @@ export { default as ColorPicker } from './design-web/ColorPicker';
 export { default as BoxShadowGenerator } from './design-web/BoxShadowGenerator';
 export { default as RegexTester } from './design-web/RegexTester';
 export { default as CssUnitsConverter } from './design-web/CssUnitsConverter';
+
+// Money & Currency Tools
+export { default as CurrencyConverter } from './money-currency/CurrencyConverter';
+export { default as CryptoConverter } from './money-currency/CryptoConverter';

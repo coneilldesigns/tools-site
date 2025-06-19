@@ -21,6 +21,84 @@ export interface ToolSection {
 
 export const toolSections: ToolSection[] = [
   {
+    icon: "💰",
+    title: "Money & Currency",
+    tools: [
+      {
+        name: "Currency Converter",
+        path: "currency-converter",
+        enabled: true,
+        seo: {
+          title: "Currency Converter | Free Online Currency Conversion Tool",
+          description: "Convert currencies between different countries with our free online currency converter. Quick, accurate, and easy to use currency conversion tool.",
+          keywords: ["currency converter", "currency conversion", "currency exchange", "currency calculator", "currency rate converter"]
+        },
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a Currency Converter?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A currency converter is a tool that helps you convert amounts between different currencies. This is useful for international transactions, travel, or simply keeping track of your finances in different currencies.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Currency Converter'
+          },
+          {
+            type: 'paragraph',
+            text: 'Simply enter the amount you want to convert and select the source and target currencies. The converter will instantly show you the equivalent amount in the target currency. You can also use the dropdown menus to select currencies by name or code.'
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Convert between any two currencies worldwide\n• Instant conversion results\n• Support for major currencies\n• Dark mode support for comfortable viewing\n• Easy-to-use interface with instant results'
+          }
+        ]
+      },
+      {
+        name: "Crypto Converter",
+        path: "crypto-converter",
+        enabled: true,
+        seo: {
+          title: "Crypto Converter | Free Online Crypto Conversion Tool",
+          description: "Convert cryptocurrencies between different currencies with our free online crypto converter. Quick, accurate, and easy to use crypto conversion tool.",
+          keywords: ["crypto converter", "crypto conversion", "crypto exchange", "crypto calculator", "crypto rate converter"]
+        },
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a Crypto Converter?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A crypto converter is a tool that helps you convert amounts between different cryptocurrencies. This is useful for international transactions, travel, or simply keeping track of your finances in different cryptocurrencies.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Crypto Converter'
+          },
+          {
+            type: 'paragraph',
+            text: 'Simply enter the amount you want to convert and select the source and target cryptocurrencies. The converter will instantly show you the equivalent amount in the target cryptocurrency. You can also use the dropdown menus to select cryptocurrencies by name or code.'
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Convert between any two cryptocurrencies worldwide\n• Instant conversion results\n• Support for major cryptocurrencies\n• Dark mode support for comfortable viewing\n• Easy-to-use interface with instant results'
+          }
+        ]
+      }
+    ]
+  },
+  {
     icon: "🔢",
     title: "Unit & Measurement Converters",
     tools: [

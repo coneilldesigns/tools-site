@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { NumericFormat } from 'react-number-format';
 
@@ -23,6 +23,7 @@ export default function UnitConverter({
   const [toValue, setToValue] = useState<string>('');
   const [textSize, setTextSize] = useState<string>('8vw');
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const lastUserInput = useRef<'from' | 'to' | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -71,6 +72,18 @@ export default function UnitConverter({
     return num.toFixed(2).replace(/\.?0+$/, '');
   };
 
+  const updateToValue = (value: number) => {
+    lastUserInput.current = 'from';
+    const convertedValue = fromToConversion(value);
+    setToValue(formatNumber(convertedValue));
+  };
+
+  const updateFromValue = (value: number) => {
+    lastUserInput.current = 'to';
+    const convertedValue = toFromConversion(value);
+    setFromValue(formatNumber(convertedValue));
+  };
+
   const handleFromChange = (value: number | '') => {
     if (value === '') {
       setFromValue('');
@@ -78,8 +91,7 @@ export default function UnitConverter({
       return;
     }
     setFromValue(value.toString());
-    const convertedValue = fromToConversion(value);
-    setToValue(formatNumber(convertedValue));
+    updateToValue(value);
   };
 
   const handleToChange = (value: number | '') => {
@@ -89,8 +101,24 @@ export default function UnitConverter({
       return;
     }
     setToValue(value.toString());
-    const convertedValue = toFromConversion(value);
-    setFromValue(formatNumber(convertedValue));
+    updateFromValue(value);
+  };
+
+  // Handle NumericFormat onValueChange with source tracking
+  const handleFromValueChange = ({ floatValue }: { floatValue: number | undefined }) => {
+    if (lastUserInput.current === 'to') {
+      lastUserInput.current = null;
+      return;
+    }
+    handleFromChange(floatValue ?? '');
+  };
+
+  const handleToValueChange = ({ floatValue }: { floatValue: number | undefined }) => {
+    if (lastUserInput.current === 'from') {
+      lastUserInput.current = null;
+      return;
+    }
+    handleToChange(floatValue ?? '');
   };
 
   return (
@@ -110,9 +138,7 @@ export default function UnitConverter({
             <div className="relative h-full">
               <NumericFormat
                 value={fromValue}
-                onValueChange={({ floatValue }) => {
-                  handleFromChange(floatValue ?? '');
-                }}
+                onValueChange={handleFromValueChange}
                 onKeyDown={(e) => {
                   if (e.key === 'Backspace' || e.key === 'Delete') {
                     e.preventDefault();
@@ -149,9 +175,7 @@ export default function UnitConverter({
             <div className="relative h-full">
               <NumericFormat
                 value={toValue}
-                onValueChange={({ floatValue }) => {
-                  handleToChange(floatValue ?? '');
-                }}
+                onValueChange={handleToValueChange}
                 onKeyDown={(e) => {
                   if (e.key === 'Backspace' || e.key === 'Delete') {
                     e.preventDefault();

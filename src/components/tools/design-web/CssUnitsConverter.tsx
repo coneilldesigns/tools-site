@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NumericFormat } from 'react-number-format';
 
@@ -201,52 +201,31 @@ export default function CssUnitsConverter() {
   const [toValue, setToValue] = useState<string>('');
   const [fromUnit, setFromUnit] = useState<CSSUnit>('px');
   const [toUnit, setToUnit] = useState<CSSUnit>('rem');
-  const [textSize, setTextSize] = useState<string>('8vw');
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState(false);
+  const [activeField, setActiveField] = useState<'from' | 'to' | null>(null);
+  const [copyFeedback, setCopyFeedback] = useState({ from: false, to: false });
   const [baseFontSize, setBaseFontSize] = useState<number>(16);
   const [viewportWidth, setViewportWidth] = useState<number>(1920);
-  const [viewportHeight, setViewportHeight] = useState<number>(1080);
-  const [copyFeedback, setCopyFeedback] = useState<{ from: boolean; to: boolean }>({ from: false, to: false });
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [activeField, setActiveField] = useState<'from' | 'to' | null>(null);
+  const [viewportHeight] = useState<number>(1080);
+  const [textSize, setTextSize] = useState<string>('8rem');
+  const lastUserInput = useRef<'from' | 'to' | null>(null);
 
+  // Responsive text size
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-      setViewportWidth(window.innerWidth);
-      setViewportHeight(window.innerHeight);
+      if (window.innerWidth < 768) {
+        setTextSize('4rem');
+      } else if (window.innerWidth < 1024) {
+        setTextSize('6rem');
+      } else {
+        setTextSize('8rem');
+      }
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  useEffect(() => {
-    const maxLength = Math.max(fromValue.length, toValue.length);
-    if (isMobile) {
-      if (maxLength > 8) {
-        setTextSize('12vw');
-      } else if (maxLength > 6) {
-        setTextSize('14vw');
-      } else if (maxLength > 4) {
-        setTextSize('16vw');
-      } else {
-        setTextSize('18vw');
-      }
-    } else {
-      if (maxLength > 8) {
-        setTextSize('8vw');
-      } else if (maxLength > 6) {
-        setTextSize('9vw');
-      } else if (maxLength > 4) {
-        setTextSize('10vw');
-      } else {
-        setTextSize('11vw');
-      }
-    }
-  }, [fromValue, toValue, isMobile]);
 
   const formatNumber = (num: number): string => {
     const roundedToInt = Math.round(num);
@@ -261,13 +240,21 @@ export default function CssUnitsConverter() {
 
   const convert = (value: number, from: CSSUnit, to: CSSUnit): number => {
     if (from === to) return value;
-    
-    const conversion = conversionFactors[from]?.[to];
-    if (conversion) {
-      return conversion(value, baseFontSize, viewportWidth, viewportHeight);
-    }
-    
-    return value;
+    const conversionFunction = conversionFactors[from]?.[to];
+    if (!conversionFunction) return value;
+    return conversionFunction(value, baseFontSize, viewportWidth, viewportHeight);
+  };
+
+  const updateToValue = (value: number) => {
+    lastUserInput.current = 'from';
+    const convertedValue = convert(value, fromUnit, toUnit);
+    setToValue(formatNumber(convertedValue));
+  };
+
+  const updateFromValue = (value: number) => {
+    lastUserInput.current = 'to';
+    const convertedValue = convert(value, toUnit, fromUnit);
+    setFromValue(formatNumber(convertedValue));
   };
 
   const handleFromChange = (value: number | '') => {
@@ -277,8 +264,7 @@ export default function CssUnitsConverter() {
       return;
     }
     setFromValue(value.toString());
-    const convertedValue = convert(value, fromUnit, toUnit);
-    setToValue(formatNumber(convertedValue));
+    updateToValue(value);
   };
 
   const handleToChange = (value: number | '') => {
@@ -288,8 +274,24 @@ export default function CssUnitsConverter() {
       return;
     }
     setToValue(value.toString());
-    const convertedValue = convert(value, toUnit, fromUnit);
-    setFromValue(formatNumber(convertedValue));
+    updateFromValue(value);
+  };
+
+  // Handle NumericFormat onValueChange with source tracking
+  const handleFromValueChange = ({ floatValue }: { floatValue: number | undefined }) => {
+    if (lastUserInput.current === 'to') {
+      lastUserInput.current = null;
+      return;
+    }
+    handleFromChange(floatValue ?? '');
+  };
+
+  const handleToValueChange = ({ floatValue }: { floatValue: number | undefined }) => {
+    if (lastUserInput.current === 'from') {
+      lastUserInput.current = null;
+      return;
+    }
+    handleToChange(floatValue ?? '');
   };
 
   const handleUnitChange = (newUnit: CSSUnit) => {
@@ -387,9 +389,7 @@ export default function CssUnitsConverter() {
             <div className="relative h-full flex-1 w-full flex items-center justify-center">
               <NumericFormat
                 value={fromValue}
-                onValueChange={({ floatValue }) => {
-                  handleFromChange(floatValue ?? '');
-                }}
+                onValueChange={handleFromValueChange}
                 onKeyDown={(e) => {
                   if (e.key === 'Backspace' || e.key === 'Delete') {
                     e.preventDefault();
@@ -453,9 +453,7 @@ export default function CssUnitsConverter() {
             <div className="relative h-full flex-1 w-full flex items-center justify-center">
               <NumericFormat
                 value={toValue}
-                onValueChange={({ floatValue }) => {
-                  handleToChange(floatValue ?? '');
-                }}
+                onValueChange={handleToValueChange}
                 onKeyDown={(e) => {
                   if (e.key === 'Backspace' || e.key === 'Delete') {
                     e.preventDefault();
