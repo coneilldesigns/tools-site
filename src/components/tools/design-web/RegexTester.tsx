@@ -1,6 +1,7 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import AceEditor from 'react-ace';
+import { HighlightWithinTextarea } from 'react-highlight-within-textarea';
 
 import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/theme-monokai';
@@ -11,40 +12,12 @@ const inputStyle =
 const labelStyle =
   'block text-sm md:text-base font-medium text-gray-400 text-center';
 
-function getHighlightedText(text: string, pattern: string, flags: string) {
-  if (!pattern || pattern.trim() === '') return [text];
-  try {
-    const regex = new RegExp(pattern, flags);
-    if (!regex.global) return [text]; // Only highlight with global flag
-    let lastIndex = 0;
-    const result: (string | { match: string })[] = [];
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      if (match.index > lastIndex) {
-        result.push(text.slice(lastIndex, match.index));
-      }
-      result.push({ match: match[0] });
-      lastIndex = regex.lastIndex;
-      // Avoid infinite loop for zero-width matches
-      if (match.index === regex.lastIndex) regex.lastIndex++;
-    }
-    if (lastIndex < text.length) {
-      result.push(text.slice(lastIndex));
-    }
-    return result;
-  } catch {
-    return [text];
-  }
-}
-
 const RegexTester: React.FC = () => {
   const [testText, setTestText] = useState('');
   const [pattern, setPattern] = useState('');
   const [flags, setFlags] = useState('g');
   const [matches, setMatches] = useState<RegExpMatchArray | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const highlightRef = useRef<HTMLDivElement>(null);
   const [selectedPreset, setSelectedPreset] = useState('custom');
 
   const regexPresets = [
@@ -100,14 +73,6 @@ const RegexTester: React.FC = () => {
     }
   };
 
-  // Sync scroll between textarea and highlight overlay
-  const handleScroll = () => {
-    if (textareaRef.current && highlightRef.current) {
-      highlightRef.current.scrollTop = textareaRef.current.scrollTop;
-      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
-    }
-  };
-
   // Update matches as you type
   React.useEffect(() => {
     if (!pattern || pattern.trim() === '') {
@@ -127,64 +92,56 @@ const RegexTester: React.FC = () => {
     }
   }, [testText, pattern, flags]);
 
-  const highlighted = getHighlightedText(testText, pattern, flags);
-
   const getMatchesJson = () => {
     if (!matches || matches.length === 0) return '{}';
     
-    const matchesData = matches.map((match, index) => {
+    try {
       const regex = new RegExp(pattern, flags);
-      const execResult = regex.exec(testText);
+      const matchesData = matches.map((match, index) => {
+        const execResult = regex.exec(testText);
+        
+        return {
+          index: index,
+          text: match,
+          position: execResult ? execResult.index : null,
+          groups: execResult ? execResult.slice(1) : [],
+          fullMatch: execResult ? Array.from(execResult) : null
+        };
+      });
       
-      return {
-        index: index,
-        text: match,
-        position: execResult ? execResult.index : null,
-        groups: execResult ? execResult.slice(1) : [],
-        fullMatch: execResult ? Array.from(execResult) : null
-      };
-    });
-    
-    return JSON.stringify(matchesData, null, 2);
+      return JSON.stringify(matchesData, null, 2);
+    } catch (e) {
+      // Return error information instead of crashing
+      return JSON.stringify({
+        error: 'Invalid regex pattern',
+        message: e instanceof Error ? e.message : 'Unknown error'
+      }, null, 2);
+    }
+  };
+
+  // Create highlight pattern for the component
+  const getHighlightPattern = () => {
+    if (!pattern || pattern.trim() === '') return null;
+    try {
+      return new RegExp(pattern, flags);
+    } catch {
+      return null;
+    }
   };
 
   return (
     <div className="flex flex-col w-full h-full min-h-[400px] m-0">
       {/* Top: Highlighted editable area */}
-      <div className="w-full border-b border-gray-800 flex-1 relative">
-        <div className="relative w-full h-full overflow-y-auto">
-          {/* Highlight overlay */}
-          <div
-            ref={highlightRef}
-            className="absolute inset-0 pointer-events-none whitespace-pre-wrap break-words rounded-lg p-3 text-lg text-left font-mono bg-transparent z-11"
-            style={{ color: 'transparent', WebkitTextFillColor: 'transparent' }}
-            aria-hidden="true"
-          >
-            {highlighted.map((part, i) =>
-              typeof part === 'string' ? (
-                <span key={i} style={{ color: 'inherit', WebkitTextFillColor: 'inherit' }}>{part}</span>
-              ) : (
-                <span
-                  key={i}
-                  className="bg-yellow-300 text-gray-900 rounded"
-                  style={{ color: '#111', WebkitTextFillColor: '#111' }}
-                >
-                  {part.match}
-                </span>
-              )
-            )}
+      <div className="w-full border-b border-gray-800 flex-1 relative max-h-[500px] overflow-y-auto">
+        <div className="relative w-full h-full">
+          <div className="w-full h-full bg-transparent p-3 text-white text-lg focus:outline-none resize-y font-mono">
+            <HighlightWithinTextarea
+              value={testText}
+              onChange={setTestText}
+              highlight={getHighlightPattern()}
+              placeholder="Paste or type your test text here..."
+            />
           </div>
-          {/* Transparent textarea for input */}
-          <textarea
-            ref={textareaRef}
-            className="w-full h-full d-block bg-transparent p-3 text-white text-lg focus:outline-none resize-y relative z-10 caret-yellow-400"
-            placeholder="Paste or type your test text here..."
-            value={testText}
-            onChange={e => setTestText(e.target.value)}
-            onScroll={handleScroll}
-            spellCheck={false}
-            style={{ background: 'none', position: 'relative' }}
-          />
         </div>
       </div>
       {/* Bottom: Two columns */}
@@ -230,17 +187,19 @@ const RegexTester: React.FC = () => {
           </select>
           </div>
 
-          <div className="flex flex-col">
-            {error && <div className="mt-4 text-red-400 font-mono">{error}</div>}
-          </div>
+          {error && (
+            <div className="flex flex-col p-3 bg-red-900 text-center">
+              <div className="text-white-400 text-xs font-mono">{error}</div>
+            </div>
+          )}
         </div>
         {/* Right: Results */}
-        <div className="flex flex-col flex-1 overflow-y-auto max-h-[500px]">
+        <div className="flex flex-col flex-1">
           <div className="p-4 border-b border-gray-800">
             <label className={labelStyle}>Matches</label>
           </div>
           {matches && matches.length > 0 ? (
-            <div className="bg-gray-900 overflow-hidden">
+            <div className="bg-gray-900 overflow-hidden flex-1 flex flex-col">
               <AceEditor
                 mode="json"
                 theme="monokai"
@@ -257,6 +216,7 @@ const RegexTester: React.FC = () => {
                 }}
                 style={{
                   backgroundColor: '#0D1117',
+                  flex: 1,
                 }}
               />
             </div>

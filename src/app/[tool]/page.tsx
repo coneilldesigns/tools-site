@@ -30,12 +30,7 @@ import {
   ColorPicker,
   BoxShadowGenerator,
   RegexTester,
-  ImageResizer,
-  FontPairingTool,
-  FaviconGenerator,
-  QRCodeGenerator,
-  ImageCompressor,
-  ImageConverter,
+  CssUnitsConverter
 } from '@/components/tools';
 import Script from 'next/script';
 
@@ -155,20 +150,11 @@ export default async function ToolPage({
         return <ColorPicker />;
       case 'box-shadow-generator':
         return <BoxShadowGenerator />;
-      case 'image-resizer':
-        return <ImageResizer />;
-      case 'font-pairing-tool':
-        return <FontPairingTool />;
-      case 'favicon-generator':
-        return <FaviconGenerator />;
-      case 'qr-code-generator':
-        return <QRCodeGenerator />;
-      case 'image-compressor': 
-        return <ImageCompressor />;
-      case 'image-converter':
-        return <ImageConverter />;
       case 'regex-tester':
         return <RegexTester />;
+      case 'css-units-converter':
+        return <CssUnitsConverter />;
+
       default:
         return (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">

@@ -699,46 +699,13 @@ export const toolSections: ToolSection[] = [
         ]
       },
       { 
-        name: "Image resizer / compressor", 
-        path: "image-resizer",
-        enabled: false,
+        name: "CSS Units Converter", 
+        path: "css-units-converter",
+        enabled: true,
         seo: {
-          title: "Image Resizer | Free Online Image Resizing and Compression Tool",
-          description: "Resize and compress images with our free online image resizer. Perfect for web optimization and social media.",
-          keywords: ["image resizer", "image compressor", "image tool", "photo resizer", "image optimizer"]
-        },
-        content: []
-      },
-      { 
-        name: "Font pairing tool", 
-        path: "font-pairing",
-        enabled: false,
-        seo: {
-          title: "Font Pairing Tool | Free Online Typography Combination Tool",
-          description: "Find perfect font combinations with our free online font pairing tool. Perfect for web design and typography.",
-          keywords: ["font pairing", "typography tool", "font combination", "font matching", "typeface pairing"]
-        },
-        content: []
-      },
-      { 
-        name: "Favicon generator", 
-        path: "favicon-generator",
-        enabled: false,
-        seo: {
-          title: "Favicon Generator | Free Online Website Icon Creation Tool",
-          description: "Create website favicons with our free online favicon generator. Perfect for web development and site branding.",
-          keywords: ["favicon generator", "website icon", "favicon creator", "site icon", "browser icon"]
-        },
-        content: []
-      },
-      { 
-        name: "HTML table generator", 
-        path: "table-generator",
-        enabled: false,
-        seo: {
-          title: "HTML Table Generator | Free Online Table Creation Tool",
-          description: "Create HTML tables with our free online table generator. Perfect for web development and data presentation.",
-          keywords: ["html table generator", "table creator", "web table", "data table", "html tool"]
+          title: "CSS Units Converter | Free Online CSS Unit Tool",
+          description: "Easily convert px to rem with our simple CSS unit converter. Quickly transform pixel values to rem units for better scalability and accessibility.",
+          keywords: ["css units converter", "px to rem", "css converter", "unit converter", "responsive design"]
         },
         content: []
       }

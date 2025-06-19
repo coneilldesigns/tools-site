@@ -1,4 +1,4 @@
-const CACHE_NAME = 'everyday-tools-v1';
+const CACHE_NAME = 'everyday-tools-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -25,14 +25,14 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Cache hit - return response
-      if (response) {
-        return response;
-      }
+  // Don't cache API routes or dynamic content
+  if (event.request.url.includes('/api/') || event.request.url.includes('?v=')) {
+    return;
+  }
 
-      return fetch(event.request).then((response) => {
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
         // Check if we received a valid response
         if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
@@ -41,8 +41,8 @@ self.addEventListener('fetch', (event) => {
         // Clone the response
         const responseToCache = response.clone();
 
-        // Only cache GET requests
-        if (event.request.method === 'GET') {
+        // Only cache static assets, not HTML pages
+        if (event.request.url.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache).catch(() => {
               // Ignore cache errors
@@ -51,8 +51,11 @@ self.addEventListener('fetch', (event) => {
         }
 
         return response;
-      });
-    })
+      })
+      .catch(() => {
+        // If fetch fails, try to serve from cache
+        return caches.match(event.request);
+      })
   );
 });
 

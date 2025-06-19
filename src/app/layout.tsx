@@ -82,6 +82,7 @@ export default function RootLayout({
         {/* Meta tags */}
         <meta name="google-adsense-account" content="ca-pub-7722207431324039" />
         <meta name="theme-color" content="#111827" />
+        <meta name="version" content={process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()} />
         
         {/* Service Worker Registration */}
         <Script id="register-sw" strategy="afterInteractive">
