@@ -43,3 +43,4 @@ export { default as CssUnitsConverter } from './design-web/CssUnitsConverter';
 // Money & Currency Tools
 export { default as CurrencyConverter } from './money-currency/CurrencyConverter';
 export { default as CryptoConverter } from './money-currency/CryptoConverter';
+export { default as CryptoChart } from './money-currency/CryptoChart';

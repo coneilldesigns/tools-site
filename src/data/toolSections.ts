@@ -95,7 +95,43 @@ export const toolSections: ToolSection[] = [
             text: '• Convert between any two cryptocurrencies worldwide\n• Instant conversion results\n• Support for major cryptocurrencies\n• Dark mode support for comfortable viewing\n• Easy-to-use interface with instant results'
           }
         ]
-      }
+      },
+      {
+        name: "Crypto Charts",
+        path: "crypto-chart",
+        enabled: true,
+        seo: {
+          title: "Crypto Chart | Free Online Crypto Chart Tool",
+          description: "Visualize the price of your favorite cryptocurrencies with our free online crypto chart. Get real-time updates on the latest crypto prices and trends.",
+          keywords: ["crypto chart", "crypto charting", "crypto chart tool", "crypto charting tool", "crypto charting tool"]
+        },
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a Crypto Chart?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A crypto chart is a tool that helps you visualize the price of your favorite cryptocurrencies. This is useful for keeping track of your investments, monitoring the latest crypto prices, and staying up-to-date with the latest crypto trends.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Crypto Chart'
+          },
+          {
+            type: 'paragraph',
+            text: 'Simply enter the cryptocurrency you want to track, and the chart will instantly show you the current price, price change, and other relevant information. You can also use the chart to visualize the price history and trends.'
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Visualize the price of any cryptocurrency in real-time\n• Visualize price history and trends with a chart\n• Get instant price updates and notifications\n• Support for multiple cryptocurrencies\n• Dark mode support for comfortable viewing'
+          }
+        ]
+      },
     ]
   },
   {
