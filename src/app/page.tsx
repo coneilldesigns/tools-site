@@ -46,26 +46,22 @@ export default function Home() {
                   <span className="mr-3">{section.icon}</span>
                   {section.title}
                 </h2>
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 border border-gray-700">
+                <div className="space-y-4">
                   {section.tools
                     .filter(tool => tool.enabled)
                     .map((tool, toolIndex) => (
                       <Link
                         href={`/${tool.path}`} 
                         key={toolIndex}
-                        className={`block p-4 border-r border-b border-gray-700 hover:bg-gray-800 transition-colors duration-200 text-center aspect-[2/1] md:aspect-[2/1] lg:aspect-[2/1] [&:nth-child(1):nth-last-child(1)]:aspect-[2/1] [&:nth-child(1):nth-last-child(2)]:aspect-[2/1] [&:nth-child(2):nth-last-child(1)]:aspect-[2/1] ${
-                          toolIndex % 2 === 1 ? 'border-r-0' : ''
-                        } lg:border-r ${
-                          toolIndex % 4 === 3 ? 'lg:border-r-0' : ''
-                        } ${
-                          Math.floor(toolIndex / 2) === Math.floor((section.tools.length - 1) / 2) ? 'border-b-0' : ''
-                        }`}
+                        className="block py-2 px-4 border border-gray-700 hover:bg-gray-800 transition-colors duration-200 rounded-lg"
                       >
-                        <div className="h-full flex flex-col justify-center">
-                          <h3 className="text-lg font-medium text-white mb-2">
-                            {tool.name}
-                          </h3>
-                          <button className="text-sm bg-primary/20 hover:bg-primary/30 text-white px-4 py-2 rounded-md flex items-center justify-center transition-colors duration-200 mx-auto">
+                        <div className="flex flex-row items-center justify-between">
+                          <div className="flex-1">
+                            <h3 className="text-md font-medium text-white">
+                              {tool.name}
+                            </h3>
+                          </div>
+                          <button className="text-sm bg-primary/20 hover:bg-primary/30 text-white px-4 py-2 rounded-md flex items-center justify-center transition-colors duration-200">
                             Try this tool
                             <svg 
                               className="w-4 h-4 ml-1" 

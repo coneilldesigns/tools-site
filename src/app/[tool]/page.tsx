@@ -35,6 +35,8 @@ import {
   CurrencyConverter,
   CryptoConverter,
   CryptoChart,
+  StockChart,
+  StockTicker,
 } from '@/components/tools';
 import Script from 'next/script';
 
@@ -165,6 +167,10 @@ export default async function ToolPage({
         return <CryptoConverter />
       case 'crypto-chart':
         return <CryptoChart />
+      case 'stock-chart':
+        return <StockChart />
+      case 'stock-ticker':
+        return <StockTicker />
       default:
         return (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">

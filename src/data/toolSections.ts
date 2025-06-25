@@ -132,6 +132,78 @@ export const toolSections: ToolSection[] = [
           }
         ]
       },
+      {
+        name: "Stock Charts",
+        path: "stock-chart",
+        enabled: false,
+        seo: {
+          title: "Stock Chart | Free Online Stock Chart Tool",
+          description: "Visualize the price of your favorite stocks with our free online stock chart. Get real-time updates on the latest stock prices and trends.",
+          keywords: ["stock chart", "stock charting", "stock chart tool", "stock charting tool", "stock charting tool"]
+        },
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a Stock Chart?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A stock chart is a tool that helps you visualize the price of your favorite stocks. This is useful for keeping track of your investments, monitoring the latest stock prices, and staying up-to-date with the latest stock trends.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Stock Chart'
+          },
+          {
+            type: 'paragraph',
+            text: 'Simply enter the stock you want to track, and the chart will instantly show you the current price, price change, and other relevant information. You can also use the chart to visualize the price history and trends.'
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Visualize the price of any stock in real-time\n• Visualize price history and trends with a chart\n• Get instant price updates and notifications\n• Support for multiple stocks\n• Dark mode support for comfortable viewing'
+          }
+        ]
+      },
+      {
+        name: "Stock Ticker",
+        path: "stock-ticker",
+        enabled: false,
+        seo: {
+          title: "Stock Ticker | Free Online Stock Market Dashboard",
+          description: "Track multiple stocks at once with our free online stock ticker. View real-time prices, changes, and market data in an easy-to-read grid format.",
+          keywords: ["stock ticker", "stock dashboard", "stock market ticker", "stock price tracker", "market dashboard"]
+        },
+        content: [
+          {
+            type: 'heading',
+            text: 'What is a Stock Ticker?'
+          },
+          {
+            type: 'paragraph',
+            text: 'A stock ticker is a dashboard that displays real-time stock prices and market data in an easy-to-read format. It shows multiple stocks simultaneously with color-coded price changes, making it perfect for monitoring your portfolio or tracking market trends.'
+          },
+          {
+            type: 'heading',
+            text: 'How to Use the Stock Ticker'
+          },
+          {
+            type: 'paragraph',
+            text: 'The stock ticker automatically displays current prices, percentage changes, and key market data for popular stocks. Use the filters to view specific sectors, sort by different criteria, and enable auto-refresh for real-time updates.'
+          },
+          {
+            type: 'heading',
+            text: 'Features'
+          },
+          {
+            type: 'paragraph',
+            text: '• Real-time stock prices and changes\n• Color-coded price movements (green/red)\n• Filter by sector (Technology, Finance, etc.)\n• Sort by symbol, change %, or volume\n• Auto-refresh every 30 seconds\n• Market cap and volume data\n• Responsive grid layout'
+          }
+        ]
+      },
     ]
   },
   {

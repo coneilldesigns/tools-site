@@ -44,3 +44,5 @@ export { default as CssUnitsConverter } from './design-web/CssUnitsConverter';
 export { default as CurrencyConverter } from './money-currency/CurrencyConverter';
 export { default as CryptoConverter } from './money-currency/CryptoConverter';
 export { default as CryptoChart } from './money-currency/CryptoChart';
+export { default as StockChart } from './money-currency/StockChart';
+export { default as StockTicker } from './money-currency/StockTicker';

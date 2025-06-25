@@ -28,6 +28,7 @@
     "@vvo/tzdb": "^6.171.0",
     "ace-builds": "^1.42.0",
     "chart.js": "^4.5.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "d3-scale": "^4.0.2",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
