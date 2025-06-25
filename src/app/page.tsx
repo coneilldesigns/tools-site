@@ -38,7 +38,7 @@ export default function Home() {
         {/* Main Content */}
         <main className="flex-1 md:ml-64 p-6 relative z-30 overflow-y-auto">
           <div className="mx-auto">
-            <h1 className="text-3xl font-bold mb-8 text-white">Everyday Tools</h1>
+            <h1 className="text-3xl font-bold mb-8 text-white hidden">Everyday Tools</h1>
             
             {enabledSections.map((section, index) => (
               <div key={index} className="mb-12">
@@ -53,16 +53,16 @@ export default function Home() {
                       <Link
                         href={`/${tool.path}`} 
                         key={toolIndex}
-                        className="block py-2 px-4 border border-gray-700 hover:bg-gray-800 transition-colors duration-200 rounded-lg"
+                        className="block py-1 px-4 border border-gray-700 hover:bg-gray-800 transition-colors duration-200 rounded-lg"
                       >
                         <div className="flex flex-row items-center justify-between">
                           <div className="flex-1">
-                            <h3 className="text-md font-medium text-white">
+                            <h3 className="text-sm font-medium text-white">
                               {tool.name}
                             </h3>
                           </div>
-                          <button className="text-sm bg-primary/20 hover:bg-primary/30 text-white px-4 py-2 rounded-md flex items-center justify-center transition-colors duration-200">
-                            Try this tool
+                          <button className="text-sm bg-primary/20 hover:bg-primary/30 text-white ps-4 py-2 rounded-md flex items-center justify-center transition-colors duration-200">
+                            Use this tool
                             <svg 
                               className="w-4 h-4 ml-1" 
                               fill="none" 
